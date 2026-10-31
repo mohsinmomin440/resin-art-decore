@@ -1,0 +1,215 @@
+{
+  "_readme": "Seed catalog. price=null means show 'Ask on WhatsApp' until the owner sets it. Claude Code: convert to src/data/products.js and keep slugs identical to the image folders.",
+  "products": [
+    {
+      "slug": "bismillah-heart-frame",
+      "name": "Bismillah Heart Frame",
+      "category": "Islamic Décor",
+      "badge": "Bestseller",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Heart-shaped resin frame with gold Bismillah calligraphy on a deep purple base.",
+      "images": [
+        "/images/products/bismillah-heart-frame/bismillah-heart-frame-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "subhanallah-plate",
+      "name": "Subhanallah Plate",
+      "category": "Islamic Décor",
+      "badge": "New",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Scalloped resin plate with gold Subhanallah calligraphy on a purple-to-blue base, on a marble stand.",
+      "images": [
+        "/images/products/subhanallah-plate/subhanallah-plate-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "four-qul-set",
+      "name": "Four Qul Set",
+      "category": "Islamic Décor",
+      "badge": "New",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Set of four scalloped navy resin plates with the four Quls in gold, on yellow stone bases.",
+      "images": [
+        "/images/products/four-qul-set/four-qul-set-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "calligraphy-bookmark",
+      "name": "Calligraphy Bookmark",
+      "category": "Islamic Décor",
+      "badge": "",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Slim green resin bookmark with gold calligraphy and a tassel.",
+      "images": [
+        "/images/products/calligraphy-bookmark/calligraphy-bookmark-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "quran-rehal",
+      "name": "Quran Rehal",
+      "category": "Islamic Décor",
+      "badge": "Custom",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Clear resin Quran stand with pressed flowers.",
+      "images": [
+        "/images/products/quran-rehal/quran-rehal-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "love-letters",
+      "name": "LOVE Letters",
+      "category": "Love & Gifts",
+      "badge": "Bestseller",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Red-to-pink ombre resin letters L-O-V-E on a white resin base.",
+      "images": [
+        "/images/products/love-letters/love-letters-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "mom-letters",
+      "name": "MOM Letters",
+      "category": "Love & Gifts",
+      "badge": "Custom",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Clear resin letters with dried flowers on a green resin base.",
+      "images": [
+        "/images/products/mom-letters/mom-letters-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "personalized-photo-heart",
+      "name": "Personalized Photo Heart",
+      "category": "Love & Gifts",
+      "badge": "Custom",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Heart with rose petals and gold flakes, made to hold your picture.",
+      "images": [
+        "/images/products/personalized-photo-heart/personalized-photo-heart-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "personalized-flower-heart",
+      "name": "Personalized Flower Heart",
+      "category": "Love & Gifts",
+      "badge": "Custom",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Clear and blue resin heart with pink dried flowers and optional gold initials.",
+      "images": [
+        "/images/products/personalized-flower-heart/personalized-flower-heart-1.jpeg",
+        "/images/products/personalized-flower-heart/personalized-flower-heart-2.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "alphabet-keychain",
+      "name": "Alphabet Keychain",
+      "category": "Keychains",
+      "badge": "Custom",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Resin letter keychains in many colors, with flowers, pearls, gold foil or glitter.",
+      "images": [
+        "/images/products/alphabet-keychain/alphabet-keychain-1.jpeg",
+        "/images/products/alphabet-keychain/alphabet-keychain-2.jpeg",
+        "/images/products/alphabet-keychain/alphabet-keychain-3.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "pressed-flower-phone-case",
+      "name": "Pressed Flower Phone Case",
+      "category": "Phone Cases",
+      "badge": "New",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Clear phone case with real pressed daisies and ferns set in resin.",
+      "images": [
+        "/images/products/pressed-flower-phone-case/pressed-flower-phone-case-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": true
+    },
+    {
+      "slug": "butterfly-heart-tray",
+      "name": "Butterfly Heart Tray",
+      "category": "Décor & Accessories",
+      "badge": "",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Teal ombre heart tray with butterflies and silver stars on a wood slice.",
+      "images": [
+        "/images/products/butterfly-heart-tray/butterfly-heart-tray-1.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": false
+    },
+    {
+      "slug": "resin-feather",
+      "name": "Resin Feather",
+      "category": "Décor & Accessories",
+      "badge": "",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Textured resin feather in blue with gold lines, and in amber orange.",
+      "images": [
+        "/images/products/resin-feather/resin-feather-1.jpeg",
+        "/images/products/resin-feather/resin-feather-2.jpeg"
+      ],
+      "photoStatus": "ready",
+      "customizable": false
+    },
+    {
+      "slug": "mashallah-scalloped-plate",
+      "name": "Mashallah Scalloped Plate",
+      "category": "Islamic Décor",
+      "badge": "",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Scalloped plate with gold Mashallah calligraphy. NO PHOTO YET (only visible in the marketing collage).",
+      "images": [],
+      "photoStatus": "needs-photo",
+      "customizable": true
+    },
+    {
+      "slug": "teardrop-earrings",
+      "name": "Teardrop Earrings",
+      "category": "Jewellery",
+      "badge": "",
+      "price": null,
+      "priceNote": "[SET PRICE]",
+      "description": "Deep purple resin teardrop earrings with gold hooks. NO PHOTO YET (only visible in the marketing collage).",
+      "images": [],
+      "photoStatus": "needs-photo",
+      "customizable": false
+    }
+  ]
+}
