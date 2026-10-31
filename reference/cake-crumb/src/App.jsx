@@ -1,0 +1,128 @@
+import { lazy, Suspense, useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { CartProvider } from './context/CartContext.jsx'
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
+import MiniFooter from './components/MiniFooter.jsx'
+import CartToast from './components/CartToast.jsx'
+import DeferredChatBot from './components/DeferredChatBot.jsx'
+import FestivalBanner from './components/FestivalBanner.jsx'
+import BackToTop from './components/BackToTop.jsx'
+import ScrollReveal from './components/ScrollReveal.jsx'
+import { OFFERS_ON, EVERYDAY_ON, offerNow, diwaliWindow } from './data/offerRules.js'
+
+// Seasonal pop-ups are their own chunks, fetched only when their window can be
+// live — eager, they cost every page ~10 KB all year for a few days' use.
+// Each still decides for itself whether to open (route, visit, dates).
+const MidMonthPopup = lazy(() => import('./components/MidMonthPopup.jsx'))
+const DiwaliWelcome = lazy(() => import('./components/DiwaliWelcome.jsx'))
+import Home from './pages/Home.jsx'
+import PageFallback from './components/skeletons/PageFallback.jsx'
+import ErrorBoundary, { clearChunkReloadGuard } from './components/ErrorBoundary.jsx'
+import AdminHeader from './components/admin/AdminHeader.jsx'
+
+// Lazy-loaded routes — keep initial bundle small.
+// Firebase only loads when /reviews or /review are visited.
+const About = lazy(() => import('./pages/About.jsx'))
+const Menu = lazy(() => import('./pages/Menu.jsx'))
+const Shop = lazy(() => import('./pages/Shop.jsx'))
+const Gallery = lazy(() => import('./pages/Gallery.jsx'))
+const Reviews = lazy(() => import('./pages/Reviews.jsx'))
+const Contact = lazy(() => import('./pages/Contact.jsx'))
+const Cart = lazy(() => import('./pages/Cart.jsx'))
+const Checkout = lazy(() => import('./pages/Checkout.jsx'))
+const ReviewSubmit = lazy(() => import('./pages/ReviewSubmit.jsx'))
+const FAQ = lazy(() => import('./pages/FAQ.jsx'))
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy.jsx'))
+const Privacy = lazy(() => import('./pages/Privacy.jsx'))
+const ConfirmOrder = lazy(() => import('./pages/ConfirmOrder.jsx'))
+const TrackOrder = lazy(() => import('./pages/TrackOrder.jsx'))
+const AdminOrders = lazy(() => import('./pages/AdminOrders.jsx'))
+const AdminAccounting = lazy(() => import('./pages/AdminAccounting.jsx'))
+const Offers = lazy(() => import('./pages/Offers.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
+
+// Routes inside the buying / admin-confirm flow render without the footer
+// so customers stay focused on the cart → checkout → done path.
+const NO_FOOTER_ROUTES = ['/cart', '/checkout', '/confirm-order']
+
+// Scroll the window back to the top on every route change. React Router
+// preserves scroll across navigations by default, which leaves users at
+// the bottom of the previous page when they tap a header/footer link.
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+  return null
+}
+
+function App() {
+  const { pathname } = useLocation()
+  const hideFooter = NO_FOOTER_ROUTES.some(
+    (r) => pathname === r || pathname.startsWith(r + '/')
+  )
+  // Admin pages are a private full-screen tool — no storefront navbar/footer/chatbot.
+  const isAdmin = pathname.startsWith('/admin')
+
+  // We rendered, so any stale-chunk reload already succeeded — re-arm the one-shot
+  // guard for a future deploy in this same tab.
+  useEffect(() => { clearChunkReloadGuard() }, [])
+
+  return (
+    <CartProvider>
+      <ScrollToTop />
+      {/* Text and images animate in on arrival and on scroll. Off on admin;
+          form fields are never animated (see ScrollReveal). */}
+      <ScrollReveal enabled={!isAdmin} routeKey={pathname} />
+      <a href="#main" className="cc-skip-link">Skip to main content</a>
+      <div className="d-flex flex-column min-vh-100">
+        {!isAdmin && <FestivalBanner />}
+        {!isAdmin && <Navbar />}
+        {isAdmin && <AdminHeader />}
+        <main id="main" className="flex-grow-1">
+          <ErrorBoundary resetKey={pathname}>
+            <Suspense fallback={<PageFallback />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/menu" element={<Menu />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/gallery" element={<Gallery />} />
+                <Route path="/reviews" element={<Reviews />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/review" element={<ReviewSubmit />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/confirm-order" element={<ConfirmOrder />} />
+                <Route path="/track-order" element={<TrackOrder />} />
+                <Route path="/offers" element={<Offers />} />
+                <Route path="/admin/orders" element={<AdminOrders />} />
+                <Route path="/admin/accounting" element={<AdminAccounting />} />
+                {/* A dead link showed the homepage under the wrong URL — the
+                    customer thought it worked, and search engines read it as a
+                    soft 404. GH Pages still serves 404.html (a copy of
+                    index.html) so real deep links boot the app; only genuinely
+                    unknown paths reach this. */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </main>
+        {isAdmin ? null : hideFooter ? <MiniFooter /> : <Footer />}
+        {!isAdmin && <CartToast />}
+        {!isAdmin && <DeferredChatBot />}
+        {!isAdmin && <BackToTop />}
+        {/* 13th–20th only, once a month; skips cart/checkout itself. */}
+        {!isAdmin && OFFERS_ON && EVERYDAY_ON && <Suspense fallback={null}><MidMonthPopup /></Suspense>}
+        {/* 5–15 November, once per visit; shown before the site. */}
+        {!isAdmin && diwaliWindow(offerNow()).live && <Suspense fallback={null}><DiwaliWelcome /></Suspense>}
+      </div>
+    </CartProvider>
+  )
+}
+
+export default App

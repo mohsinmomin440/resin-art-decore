@@ -1,0 +1,525 @@
+import { photoFor, photosFor } from './productImages.js'
+import { inr } from './format.js'
+
+// All prices in INR. Sourced from menu.html.
+
+// PHOTOS ARE NOT LISTED HERE. Every product's picture is looked up by its NAME
+// in productImages.js — one file, one line per product, name on the left and
+// file name on the right. Pairing them by hand on these lines is what let a
+// product called "Strawberry Cheesecake" quietly carry the mango photo: the
+// name and the picture sat in two different columns and nothing checked them.
+// Rename a product below → rename its key in productImages.js too, or it falls
+// back to a generic shot (and says so in the dev console).
+// `photos` is only set for the few products with more than one (EXTRA_PHOTOS).
+const withPhoto = (p) => {
+  const photos = photosFor(p.name)
+  return { ...p, img: photoFor(p.name), ...(photos && { photos }) }
+}
+
+// Default allergen sets per category — most baked goods share these.
+const A_BAKED   = ['contains-egg', 'contains-dairy', 'contains-gluten', 'eggless-option']
+const A_NUTS    = [...A_BAKED, 'contains-nuts']
+
+// Featured cards on Home — visually distinctive picks across categories.
+// `shopId` + `tier` name the shop product and size each card sells, so its
+// Add to Cart puts in the SAME line the Shop would (featuredCartLine below).
+// With its own 'feat-N' id the card's line never merged with the Shop's, and
+// two Red Velvet boxes from Home missed the Diwali pack (₹360 vs ₹349).
+export const featured = [
+  { id: 'feat-1', name: 'Blueberry Cheesecake', price: 410, category: 'Cheesecakes', allergens: A_BAKED, shopId: 'cc-blueberry', tier: 'base' },
+  { id: 'feat-2', name: 'Red Velvet Cupcakes (Box of 6)', price: 180, category: 'Cupcakes', allergens: A_BAKED, shopId: 'cup-redvelvet', tier: 'slice' },
+  { id: 'feat-3', name: 'Triple Choc Cookies (Box of 6)', price: 340, category: 'Cookies', allergens: A_BAKED, shopId: 'ck-triple', tier: 'base' },
+  { id: 'feat-4', name: 'Pistachio Milk Cake (Bento)', price: 520, category: 'Milk Cakes', allergens: A_NUTS, shopId: 'mc-pistachio', tier: 'base' },
+].map(withPhoto)
+
+/**
+ * The cart line a Home featured card adds — built exactly as the quick view
+ * builds that size (id, "(tier)" name, price), with the card's photo. Falls
+ * back to the card itself if its shop product is gone.
+ */
+export function featuredCartLine(card) {
+  const p = shopProducts.find((x) => x.id === card.shopId)
+  if (!p) return card
+  if (card.tier === 'slice') {
+    return { id: `${p.id}-slice`, name: `${p.name} (${p.sliceLabel || 'Slice'})`, price: p.slice, img: card.img || p.img }
+  }
+  return { ...p, name: `${p.name} (${p.sizeLabel || 'Whole'})`, img: card.img || p.img }
+}
+
+// Flat list for /shop — full PDF menu, every item orderable.
+// `slice` field gives a second price option (rendered as a second add-to-cart button).
+export const shopProducts = [
+  // ───── CHEESECAKES — Banto 4" whole / single-serve tub ─────
+  // The second tier is a TUB, and is called one everywhere a customer reads it:
+  // "slice" was read as a triangle cut from a cake, which is not what arrives.
+  // The accounting menu still says "Per slice" — that is the owner's own label.
+  // Classic
+  { id: 'cc-strawberry', name: 'Strawberry Cheesecake', price: 350, slice: 120, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  { id: 'cc-blueberry', name: 'Blueberry Cheesecake', price: 410, slice: 140, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  { id: 'cc-raspberry', name: 'Raspberry Cheesecake', price: 410, slice: 140, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  { id: 'cc-orange', name: 'Orange Creamsicle Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  { id: 'cc-lemon', name: 'Lemon Cheesecake', price: 350, slice: 120, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  { id: 'cc-rose', name: 'Rose Cheesecake', price: 350, slice: 120, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Classic' },
+  // Exotic
+  { id: 'cc-mango', name: 'Mango Cheesecake', price: 350, slice: 120, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  { id: 'cc-passion', name: 'Passion Fruit Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  { id: 'cc-cherry', name: 'Cherry Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  { id: 'cc-guava', name: 'Guava Cheesecake', price: 350, slice: 120, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  { id: 'cc-mango-passion', name: 'Mango & Passion Cheesecake', price: 410, slice: 140, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  { id: 'cc-coconut', name: 'Coconut Cheesecake', price: 410, slice: 140, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Exotic' },
+  // Chocolate
+  { id: 'cc-choc', name: 'Chocolate Cheesecake (Milk & Dark)', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  { id: 'cc-choc-orange', name: 'Chocolate Orange Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  { id: 'cc-blackforest', name: 'Black Forest Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  { id: 'cc-choc-chunk', name: 'Chocolate Chunk Cheesecake', price: 380, slice: 130, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  { id: 'cc-nutella', name: 'Nutella Cheesecake', price: 440, slice: 150, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  { id: 'cc-biscoff', name: 'Biscoff Cheesecake', price: 410, slice: 140, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Chocolate' },
+  // Premium
+  { id: 'cc-cookies-cream', name: 'Cookies & Cream Cheesecake', price: 430, slice: 150, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Premium' },
+  { id: 'cc-caramel', name: 'Caramel Cheesecake', price: 430, slice: 150, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Premium' },
+  { id: 'cc-coffee', name: 'Coffee Cheesecake', price: 430, slice: 150, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', group: 'Premium' },
+  { id: 'cc-pistachio', name: 'Pistachio Cheesecake', price: 470, slice: 160, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', badge: 'Premium', group: 'Premium' },
+  { id: 'cc-dubai', name: 'Dubai Cheesecake', price: 500, slice: 170, category: 'Cheesecakes', sizeLabel: 'Banto 4"', sliceLabel: 'Tub', badge: 'Special', group: 'Premium' },
+
+  // ───── MILK CAKES — Bento / Tub ─────
+  { id: 'mc-tres', name: 'Tres Leches Milk Cake', desc: 'Sponge soaked in three milks (the classic tres leches) and finished with fresh cream — whole, or a single-serve tub.', price: 420, slice: 120, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-rose', name: 'Rose Milk Cake', price: 420, slice: 120, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-mango', name: 'Mango Milk Cake', price: 440, slice: 120, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-biscoff', name: 'Biscoff Milk Cake', price: 480, slice: 130, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-nutella', name: 'Nutella Milk Cake', price: 480, slice: 130, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-turkish', name: 'Turkish (Caramel) Milk Cake', price: 480, slice: 130, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub' },
+  { id: 'mc-pistachio', name: 'Pistachio Milk Cake', price: 520, slice: 140, category: 'Milk Cakes', sizeLabel: 'Bento', sliceLabel: 'Tub', badge: 'Premium' },
+
+  // ───── SPONGE CAKES — Whole Bento / Tub ─────
+  { id: 'sp-vanilla', name: 'Vanilla Sponge Cake', price: 450, slice: 100, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-chocolate', name: 'Chocolate Sponge Cake', price: 470, slice: 100, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-strawberry', name: 'Strawberry Sponge Cake', price: 470, slice: 110, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-redvelvet', name: 'Red Velvet Sponge Cake', price: 470, slice: 110, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-mango', name: 'Mango Sponge Cake', price: 480, slice: 120, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-blueberry', name: 'Blueberry Sponge Cake', price: 480, slice: 120, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-biscoff', name: 'Biscoff Sponge Cake', price: 490, slice: 130, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-nutella', name: 'Nutella Sponge Cake', price: 490, slice: 130, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+  { id: 'sp-pistachio', name: 'Pistachio Sponge Cake', price: 510, slice: 150, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub', badge: 'Premium' },
+  { id: 'sp-choc-chunk', name: 'Chocolate Chunk Sponge Cake', price: 480, slice: 120, category: 'Sponge Cakes', sizeLabel: 'Whole Bento', sliceLabel: 'Tub' },
+
+  // ───── COOKIES — 1 pc / Box of 6 / Box of 12 ─────
+  // The only THREE-tier products. `unit` is one loose cookie (see hasUnit
+  // below); `price`/`slice` stay the two box sizes, so neither box is lost.
+  // A single does NOT divide into a box — ₹50 × 6 is ₹300 against a ₹280 box —
+  // so the box is genuinely the better buy and the card still quotes it.
+  { id: 'ck-triple', name: 'Triple Choc Cookies', price: 340, slice: 700, unit: 60, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-white', name: 'White Choc Cookies', price: 280, slice: 580, unit: 50, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-classic', name: 'Classic Cookies', price: 280, slice: 580, unit: 50, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-redvelvet', name: 'Red Velvet Cookies', price: 340, slice: 700, unit: 60, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-almond', name: 'Almond Cookies', price: 400, slice: 820, unit: 70, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-coconut', name: 'Coconut Cookies', price: 340, slice: 700, unit: 60, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie' },
+  { id: 'ck-pistachio', name: 'Pistachio & Rose Cookies', price: 400, slice: 820, unit: 70, category: 'Cookies', sizeLabel: 'Box of 6', sliceLabel: 'Box of 12', unitLabel: '1 cookie', badge: 'Special' },
+
+  // ───── CUPCAKES — per piece (min 2) or box of 6 (₹20 extra for floral / additional decoration) ─────
+  // These are the bakery's own counter prices, taken from Menu & Prices in
+  // /admin/accounting (Aug 2026) — that list, not this file, is what a walk-in
+  // is actually charged, so the two must agree.
+  //
+  //   THE BOX IS NO LONGER A STRICT ×6 OF THE SINGLE. It used to be, and the
+  //   reasoning still stands — both tiers are quoted side by side and customers
+  //   do check the arithmetic — but the real prices don't divide cleanly:
+  //     Vanilla, Red Velvet, Biscoff  ₹25/₹150, ₹30/₹180  → exactly ×6
+  //     Pistachio                     ₹35/₹190  → box saves ₹20 on six singles
+  //     Chocolate, Nutella, Strawberry ₹28/₹170 → box costs ₹2 MORE than six
+  //     Sprinkle                      ₹25/₹155  → box costs ₹5 MORE than six
+  //   The last four are the ones to watch: a customer adding six singles pays
+  //   less than the box, which reads as a mistake even though it isn't. If the
+  //   owner wants those tidied, move the BOX price to the multiple (₹168, ₹150)
+  //   or the single to ₹28.33/₹25.83 — box-first is still the better habit.
+  //
+  //   `minQty: 2` — the bakery won't bake a single cupcake, so the per-piece
+  //   tier enters the cart at 2 and drops out entirely below that. It applies to
+  //   the `price` tier only; a box of 6 is orderable on its own. See
+  //   CartContext.jsx (minQtyOf) for how it's enforced.
+  { id: 'cup-vanilla', name: 'Vanilla Cupcakes', price: 25, slice: 150, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-redvelvet', name: 'Red Velvet Cupcakes', price: 30, slice: 180, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-chocolate', name: 'Chocolate Cupcakes', price: 28, slice: 170, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-pistachio', name: 'Pistachio Cupcakes', price: 35, slice: 190, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, badge: 'Premium' },
+  { id: 'cup-biscoff', name: 'Biscoff Cupcakes', price: 30, slice: 180, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-nutella', name: 'Nutella Cupcakes', price: 28, slice: 170, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-strawberry', name: 'Strawberry Cupcakes', price: 28, slice: 170, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2 },
+  { id: 'cup-sprinkle', name: 'Sprinkle Cupcakes', price: 25, slice: 155, category: 'Cupcakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, desc: 'A vanilla cupcake under a swirl of buttercream, finished with rainbow sprinkles — by the piece (two or more) or as a box of six.' },
+  // Box only: a variety box is six DIFFERENT flavours, so there is no single to
+  // price. No `slice`, no `minQty` — `price` is the box, and describe() would
+  // otherwise offer a per-piece tier that doesn't exist, hence the `desc`.
+  { id: 'cup-variety', name: 'Variety Cupcakes (Box of 6)', price: 180, category: 'Cupcakes', sizeLabel: 'Box of 6', desc: 'Six cupcakes, every one a different flavour — the baker’s pick of the day, boxed to share.' },
+
+  // ───── BROWNIES — 1 pc / Box of 6 (also sold in 4 & 12) ─────
+  // `piece: true` — the `price` tier is ONE loose piece, so the quick view
+  // gives it a counter and the batch-bake note, exactly like a cookie single.
+  // It is NOT `minQty` (that would be a minimum, and these sell singly) and NOT
+  // `unit` (that field is for a third tier on a product whose other two prices
+  // are both boxes). Flag only; it changes nothing about what the card quotes.
+  { id: 'bk-brownie-classic', name: 'Classic Brownie', price: 60, slice: 350, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Brownies' },
+  { id: 'bk-brownie-nutella', name: 'Nutella Brownie', price: 70, slice: 410, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Brownies' },
+  { id: 'bk-brownie-biscoff', name: 'Biscoff Brownie', price: 70, slice: 410, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Brownies' },
+  { id: 'bk-brownie-oreo', name: 'Oreo Brownie', price: 70, slice: 410, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Brownies' },
+  { id: 'bk-brownie-pistachio', name: 'Pistachio Brownie', price: 80, slice: 470, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Brownies' },
+  { id: 'bk-brownie-redvelvet', name: 'Red Velvet Brownie', price: 80, slice: 470, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', badge: 'Premium', piece: true, group: 'Brownies' },
+
+  // ───── BLONDIES — 1 pc / Box of 6 ─────
+  { id: 'bk-blondie-classic', name: 'Classic Blondie', price: 60, slice: 350, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Blondies' },
+  { id: 'bk-blondie-white', name: 'White Chocolate Blondie', price: 70, slice: 410, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Blondies' },
+  { id: 'bk-blondie-strawberry', name: 'Strawberry Blondie', price: 80, slice: 470, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Blondies' },
+  { id: 'bk-blondie-mango', name: 'Mango Blondie', price: 70, slice: 410, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Blondies' },
+  { id: 'bk-blondie-blueberry', name: 'Blueberry Blondie', price: 80, slice: 470, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', piece: true, group: 'Blondies' },
+
+  // ───── CAKESICLES — by shape (min 6) ─────
+  // Two flavours × four shapes. The counter menu lists Chocolate and Vanilla as
+  // the ITEMS and the shapes as their price rows — but a product entry holds two
+  // prices and there are four shapes, so each pair becomes its own row here.
+  // The two flavours are priced identically at every shape; that is the
+  // bakery's list, not a copy-paste slip. Cheapest shape first.
+  { id: 'bk-cakesickle-choc-heart', name: 'Chocolate Cakesicle (Heart)', price: 110, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-choc-sq', name: 'Chocolate Cakesicle (Square)', price: 130, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-choc-cir', name: 'Chocolate Cakesicle (Circle)', price: 150, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-choc-ice', name: 'Chocolate Cakesicle (Ice Cream)', price: 160, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-van-heart', name: 'Vanilla Cakesicle (Heart)', price: 110, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-van-sq', name: 'Vanilla Cakesicle (Square)', price: 130, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-van-cir', name: 'Vanilla Cakesicle (Circle)', price: 150, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+  { id: 'bk-cakesickle-van-ice', name: 'Vanilla Cakesicle (Ice Cream)', price: 160, category: 'Bakes', sizeLabel: 'Per piece', group: 'Cakesicles' },
+
+  // ───── CAKE POPS — per piece (min 2) or box of 6 ─────
+  // Was one generic "Cake Pops" row at ₹120/₹230. The bakery sells four named
+  // flavours (Menu & Prices, /admin/accounting) and the real prices are lower.
+  //
+  //   The counter list carries THREE tiers — piece, 6 and 12 — but a product
+  //   entry holds only two (`price` + `slice`). Nothing is lost here, because
+  //   cake pops price perfectly linearly: ₹15 × 6 = ₹90 and × 12 = ₹180 for
+  //   every flavour, so a box of 12 is exactly two sixes and is quoted as such
+  //   in the description. Do NOT add a third tier for this — if a future
+  //   flavour breaks the linearity, give it its own box-of-12 row instead.
+  //
+  //   `minQty: 2` matches the 2-piece minimum the accounting app already
+  //   enforces on every per-piece variant (isPerPieceVariant, orderItems.js),
+  //   and is what makes the Shop card quote the ₹90 BOX rather than "From ₹15"
+  //   under a photo of six — the per-piece trap documented in CLAUDE.md.
+  { id: 'bk-cakepop-chocolate', name: 'Chocolate Cake Pops', price: 15, slice: 90, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, group: 'Cake Pops' },
+  { id: 'bk-cakepop-vanilla', name: 'Vanilla Cake Pops', price: 15, slice: 90, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, group: 'Cake Pops' },
+  { id: 'bk-cakepop-redvelvet', name: 'Red Velvet Cake Pops', price: 15, slice: 90, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, group: 'Cake Pops' },
+  { id: 'bk-cakepop-pistachio', name: 'Pistachio Cake Pops', price: 20, slice: 120, category: 'Bakes', sizeLabel: '1 pc', sliceLabel: 'Box of 6', minQty: 2, badge: 'Premium', group: 'Cake Pops' },
+
+  // Was grouped under 'Cakesicles & More' — now that the cakesicles have a group
+  // of their own, that heading would name a group they'd left. The counter menu
+  // files this under "Sweet Treats", so the Shop heading matches it.
+  { id: 'bk-strawberry', name: 'Choc Covered Strawberry', price: 40, category: 'Bakes', sizeLabel: 'Per piece', group: 'Sweet Treats' },
+
+  // ───── PLATTERS ─────
+  { id: 'pl-pancakes', name: 'Pancake (stack of 3)', price: 180, category: 'Platters' },
+  { id: 'pl-crepes', name: 'Crêpe Roll (Nutella filled)', price: 70, category: 'Platters' },
+
+  // ───── SPECIAL GIFTS ─────
+  // One product today. `group` is the occasion ("Birthday"), so a second
+  // occasion is a new row with its own group, not a new category.
+  { id: 'sg-birthday-box', name: 'Birthday & Anniversary Gift Box', price: 1600, category: 'Special Gifts', sizeLabel: 'Box', group: 'Birthday & Anniversary', desc: 'A cake and fresh flowers for a birthday or an anniversary, packed together in one gift box — and a dessert cup comes free with it.' },
+
+  // ───── DESSERT CUPS ─────
+  { id: 'dc-custard-vanilla', name: 'Vanilla Custard Cup', price: 60, category: 'Dessert Cups', sizeLabel: '150ml' },
+  { id: 'dc-custard-chocolate', name: 'Chocolate Custard Cup', price: 70, category: 'Dessert Cups', sizeLabel: '150ml' },
+  { id: 'dc-custard-mango', name: 'Mango Custard Cup', price: 80, category: 'Dessert Cups', sizeLabel: '150ml' },
+  { id: 'dc-trifle', name: 'Trifle Cup', price: 100, category: 'Dessert Cups', sizeLabel: '150ml' },
+  { id: 'dc-jelly', name: 'Jelly Cup', price: 50, category: 'Dessert Cups', sizeLabel: '150ml' },
+  { id: 'dc-grass', name: 'Milk Pudding (Ghas) Cup', desc: 'A chilled milk pudding set with grass jelly (ghas), ready to spoon.', price: 40, category: 'Dessert Cups', sizeLabel: '150ml' },
+
+  // ───── DRINKS — Mojitos ─────
+  { id: 'dr-virginmojito', name: 'Virgin Mojito', price: 180, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-bluelagoon', name: 'Blue Lagoon Mojito', price: 190, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-strawberrydelight', name: 'Strawberry Delight Mojito', price: 200, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-watermelonwave', name: 'Watermelon Wave Mojito', price: 200, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-mangodream', name: 'Mango Dream Mojito', price: 190, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-blueberrybliss', name: 'Blueberry Bliss Mojito', price: 190, category: 'Drinks', group: 'Mojitos' },
+  { id: 'dr-lycheemist', name: 'Lychee Mist Mojito', price: 190, category: 'Drinks', group: 'Mojitos' },
+
+  // ───── DRINKS — Milkshakes ─────
+  { id: 'dr-lotus-shake', name: 'Lotus Luxury Milkshake (Biscoff)', price: 240, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-hazelnut-shake', name: 'Hazelnut Heaven Milkshake (Nutella)', price: 240, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-oreo-shake', name: 'Oreo Monster Milkshake', price: 240, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-strawberry-shake', name: 'Strawberry Cheesecake Milkshake', price: 230, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-blueberry-shake', name: 'Blueberry Bomb Milkshake', price: 230, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-mango-shake', name: 'Golden Velvet Milkshake (Mango)', price: 220, category: 'Drinks', group: 'Milkshakes' },
+  { id: 'dr-pistachio-shake', name: 'Pistachio Paradise Milkshake', price: 250, category: 'Drinks', group: 'Milkshakes' },
+
+  // ───── DRINKS — Iced Coffee ─────
+  { id: 'dr-iced-classic', name: 'Classic Iced Coffee', price: 220, category: 'Drinks', group: 'Iced Coffee' },
+  { id: 'dr-iced-mocha', name: 'Mocha Madness Iced Latte', price: 240, category: 'Drinks', group: 'Iced Coffee' },
+  { id: 'dr-iced-caramel', name: 'Caramel Craze Latte', price: 230, category: 'Drinks', group: 'Iced Coffee' },
+  { id: 'dr-iced-vanilla', name: 'Vanilla Bean Dream (Iced)', price: 230, category: 'Drinks', group: 'Iced Coffee' },
+  { id: 'dr-iced-strawberry', name: 'Strawberry Silk Latte', price: 230, category: 'Drinks', group: 'Iced Coffee' },
+  { id: 'dr-iced-cookie', name: 'Cookie Monster Brew', price: 240, category: 'Drinks', group: 'Iced Coffee' },
+
+  // ───── DRINKS — Hot Coffee (+₹10 for cream) ─────
+  { id: 'dr-hot-classic', name: 'Classic Hot Coffee', price: 200, category: 'Drinks', group: 'Hot Coffee' },
+  { id: 'dr-hot-mochaccino', name: 'Mochaccino', price: 210, category: 'Drinks', group: 'Hot Coffee' },
+  { id: 'dr-hot-macchiato', name: 'Caramel Macchiato', price: 210, category: 'Drinks', group: 'Hot Coffee' },
+  { id: 'dr-hot-vanilla', name: 'Vanilla Bean Dream (Hot)', price: 210, category: 'Drinks', group: 'Hot Coffee' },
+
+  // ───── LOOK OUT FOR — new additions ─────
+  { id: 'lo-cookie-fries', name: 'Cookie Fries', price: 200, category: 'Bakes', sizeLabel: 'Serving', group: 'Look Out For' },
+  { id: 'lo-macarons', name: 'Macarons', price: 120, category: 'Bakes', sizeLabel: 'Per piece', group: 'Look Out For' },
+  { id: 'lo-rice-krispies', name: 'Rice Krispies Treats', price: 90, category: 'Bakes', sizeLabel: 'Per piece', group: 'Look Out For' },
+  { id: 'lo-brownie-cheesecake', name: 'Brownie Cheesecake (Whole)', price: 750, category: 'Cheesecakes', sizeLabel: 'Whole', group: 'Look Out For' },
+  { id: 'lo-dipped-slice', name: 'Dipped Cheesecake Slice', price: 200, category: 'Cheesecakes', sizeLabel: 'Per slice', group: 'Look Out For' },
+  { id: 'lo-cookie-box', name: 'Cookie Dipping Box', price: 420, category: 'Bakes', sizeLabel: 'Box', group: 'Look Out For' },
+  { id: 'lo-brownie-box', name: 'Brownie Dipping Box', price: 450, category: 'Bakes', sizeLabel: 'Box', group: 'Look Out For' },
+  { id: 'lo-brookie-box', name: 'Brookie Dipping Box', price: 470, category: 'Bakes', sizeLabel: 'Box', group: 'Look Out For' },
+].map(attachAllergens).map(withPhoto)
+
+// ─────────────────────── how a product is priced on screen ───────────────────
+// These three live here, not in the pages, because the rule has been got wrong
+// twice by being re-implemented per file. Shop, SearchOverlay and
+// RelatedProducts all import them; nothing re-derives them.
+
+/**
+ * The entry price. **Never `slice || price`** — `slice` is the *cheaper*
+ * per-slice tier for cheesecakes but the *pricier* box-of-12 for cookies (26 of
+ * the products here), so assuming it's the smaller one made a ₹340 cookie box
+ * advertise "From ₹700".
+ */
+/**
+ * Sizes the bakery sells at the counter that the website does NOT take orders
+ * for — a product entry holds two prices (`price` + `slice`) and these need a
+ * third or fourth. They are quoted in the category note above the grid so the
+ * site doesn't pretend they don't exist; the customer asks on WhatsApp.
+ *
+ * DISPLAY ONLY. Nothing here reaches the cart, the totals or the ChatBot — if
+ * one of these ever becomes orderable it needs a real product entry, not a
+ * lookup here. Figures are the CHEAPEST of that tier across the group, matching
+ * the "from ₹X" wording. Source: Menu & Prices in /admin/accounting, Aug 2026.
+ *
+ * Cake pops deliberately aren't listed: their box of 12 is exactly 2 × the box
+ * of 6, so `describe()` states it directly instead.
+ */
+export const EXTRA_TIERS = {
+  Cookies: [{ label: 'by the piece', from: 50 }],
+  Brownies: [{ label: 'a box of 4', from: 240 }, { label: 'a box of 12', from: 710 }],
+  Blondies: [{ label: 'a box of 4', from: 240 }, { label: 'a box of 12', from: 710 }],
+}
+
+/**
+ * A THIRD tier: one loose piece, on a product whose `price`/`slice` are both
+ * boxes. Cookies today — ₹50 a cookie, ₹280 for six, ₹580 for twelve.
+ *
+ * It is deliberately NOT modelled as `price` (that would make `slice` the only
+ * box and lose one of the two box sizes). Nothing else in the codebase treats
+ * `unit` as orderable except `ProductQuickView` and the ChatBot, which each add
+ * it under the id `<id>-unit`.
+ */
+export const hasUnit = (p) => p.unit != null
+
+/** Cheapest tier of ANY kind — what the price FILTER and SORT run on. */
+export const lowestPrice = (p) =>
+  Math.min(...[p.price, p.slice, p.unit].filter((v) => v != null))
+
+/**
+ * Cheapest tier that is NOT a loose single. This is the old `lowestPrice`, kept
+ * separate now that a single can undercut every box: a card showing a box of
+ * cookies must never quote the ₹50 one-cookie rate.
+ */
+const lowestBox = (p) => (p.slice != null ? Math.min(p.price, p.slice) : p.price)
+
+/** Sold by the piece with a minimum — cupcakes today. `price` is one piece. */
+export const isPerPiece = (p) => p.slice != null && (p.minQty || 1) > 1
+
+/**
+ * What a card, a search result or a suggestion should QUOTE.
+ *
+ * A per-piece product quotes its BOX price, never the per-piece rate: "From
+ * ₹25" under "Vanilla Cupcakes" beside a photo of six reads as six for ₹25, and
+ * customers did read it that way. A `unit` product is the same trap from the
+ * other direction — the photo is a box, so it quotes the cheapest BOX and the
+ * single shows only in the quick view, where the count is chosen.
+ * Filters and sort still use `lowestPrice()` — see CLAUDE.md.
+ */
+export const cardPrice = (p) =>
+  hasUnit(p) ? lowestBox(p)
+    : isPerPiece(p) ? p.slice
+      : lowestPrice(p)
+
+/** …and the words around it, so three surfaces can't word it three ways. */
+export const priceLabel = (p) =>
+  hasUnit(p) ? `From ${inr(lowestBox(p))}`
+    : isPerPiece(p) ? inr(p.slice)
+      : p.slice != null ? `From ${inr(lowestBox(p))}`
+        : inr(p.price)
+
+// ─────────────────────────── what a product IS ───────────────────────────
+// Every product carried the same sentence in the quick view — "Handcrafted with
+// the finest ingredients…" — which told a customer choosing between two
+// cheesecakes precisely nothing, and left the JSON-LD `Product` with no
+// description at all. Built from the name and the category rather than typed
+// 111 times, so a new product is never left blank; set `desc` on any entry to
+// overrule it.
+
+// "Vanilla Bean Dream (Iced)" → "Vanilla Bean Dream"; "Pistachio (Premium)
+// Cheesecake" → "Pistachio". What's left is the flavour, which is the only part
+// worth putting in a sentence — the rest is the category, said twice.
+const NOUN = /\s*(cheesecakes?|milk cakes?|sponge cakes?|cookies?|cupcakes?|mojito|iced latte|latte|macchiato|mochaccino|brew|iced coffee|hot coffee|coffee|milkshake|brownie|blondie|cup)\s*$/i
+const flavourOf = (p) =>
+  p.name.replace(/\s*\((premium|iced|hot|nutella filled|stack of \d+)\)\s*/gi, ' ')
+    .replace(NOUN, '').trim() || p.name
+
+// Mid-sentence the flavour is lower case — "a triple choc cookie", not "a
+// triple Choc cookie" — but the brands in it keep their capital.
+const PROPER = /^(nutella|biscoff|oreo|lotus|turkish|trés|tres|léches|leches|ghas|krispies|dubai|ferrero|kitkat)$/i
+const lower = (s) =>
+  s.split(/\s+/)
+    .map((w) => (PROPER.test(w) ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : w.toLowerCase()))
+    .join(' ')
+
+/** One sentence saying what it is. `p.desc` wins when an entry sets it. */
+export function describe(p) {
+  if (p.desc) return p.desc
+  const f = lower(flavourOf(p))
+  const two = p.slice != null
+  const name = p.name.toLowerCase()
+
+  switch (p.category) {
+    case 'Cheesecakes': {
+      // Brackets and the word "cheesecake"/"slice" left in the flavour made
+      // "a baked chocolate cheesecake (milk & dark) cheesecake".
+      if (/slice/.test(name)) return 'A slice of baked cheesecake on a buttery biscuit base, dipped and finished by hand.'
+      const shade = name.match(/\(([^)]*&[^)]*)\)/)?.[1] // "(Milk & Dark)" → "milk & dark"
+      const cf = lower(flavourOf(p).replace(/\s*\([^)]*\)/g, '').replace(/\s*cheesecake.*$/i, '').trim())
+      const what = shade ? `${shade.toLowerCase().replace('&', 'and')} ${cf}` : cf
+      const size = two ? ' — whole, or a single-serve tub' : /\(whole\)/.test(name) ? ' — the whole cake' : ''
+      return `A baked ${what} cheesecake on a buttery biscuit base${size}.`
+    }
+    case 'Milk Cakes':
+      // "Turkish (Caramel)" → "Turkish caramel"
+      return `Sponge soaked in sweetened milk and finished with ${f.replace(/[()]/g, '')} cream${two ? ' — whole, or a single-serve tub' : ''}.`
+    case 'Sponge Cakes':
+      return `A light ${f} sponge layered with fresh cream${two ? ' — a whole bento cake, or a tub for one' : ''}.`
+    case 'Cookies':
+      return `A thick, chewy ${f} cookie baked to order${two ? ' — singly or by the box' : ''}.`
+    case 'Cupcakes':
+      return `A ${f} cupcake under a swirl of buttercream — by the piece (two or more) or as a box of six.`
+    case 'Dessert Cups':
+      return `A chilled ${f} cup, layered and ready to spoon.`
+    case 'Platters':
+      return /pancake/.test(name)
+        ? 'A stack of three warm pancakes, served with syrup and fruit.'
+        : 'Thin crêpes rolled around Nutella and finished with a dusting of cocoa.'
+    case 'Drinks':
+      if (/mojito|lagoon/.test(name)) return `A chilled ${f} mojito — fizzy, sharp and not sweet.`
+      if (/milkshake/.test(name)) {
+        // "Lotus Luxury Milkshake (Biscoff)" — the word sits mid-name and the
+        // bracket repeats the flavour, so strip both or it reads "milkshake
+        // (biscoff) milkshake".
+        const shake = lower(p.name.replace(/\(.*?\)/g, '').replace(/milkshake/i, '').trim())
+        return `A thick ${shake} milkshake, blended to order and served cold.`
+      }
+      // `group` is 'Hot Coffee' / 'Iced Coffee' and says it outright; the name
+      // doesn't (a "Caramel Macchiato" is hot, a "Strawberry Silk Latte" iced).
+      // "(Iced)" / "(Hot)" in the name repeats what the sentence says.
+      return /hot/i.test(p.group || '')
+        ? `${p.name.replace(/\s*\((hot|iced)\)/i, '')} — pulled fresh and served hot.`
+        : `${p.name.replace(/\s*\((hot|iced)\)/i, '')} — brewed fresh and served over ice.`
+    case 'Bakes':
+      if (/brownie box|dipping box/.test(name)) return `${p.name} — a sharing box with a warm dip on the side.`
+      if (/brownie/.test(name)) return `A dense, fudgy ${f} brownie${two ? ' — one piece or a box of six' : ''}.`
+      if (/blondie/.test(name)) {
+        // "Classic" and "White Chocolate" aren't things to put IN a blondie.
+        const tail = two ? ' — one piece or a box of six' : ''
+        if (/classic/.test(name)) return `A chewy, classic white-chocolate blondie${tail}.`
+        if (/white choc/.test(name)) return `A chewy blondie loaded with white chocolate${tail}.`
+        return `A chewy white-chocolate blondie with ${f}${tail}.`
+      }
+      if (/cakesicle/.test(name)) {
+        // "Chocolate Cakesicle (Heart)" → flavour "chocolate", shape "heart".
+        const flav = lower(p.name.replace(/\s*cakesicle.*$/i, '').trim()) || 'vanilla'
+        const shape = (p.name.match(/\(([^)]+)\)/)?.[1] || '').toLowerCase()
+        // "a ice cream shape" — the article has to follow the shape, and
+        // "ice cream" is the one that starts with a vowel.
+        const art = /^[aeiou]/.test(shape) ? 'an' : 'a'
+        // A chocolate cakesicle really is chocolate cake in a chocolate shell,
+        // but saying both in one breath reads like a slip, so the shell is only
+        // named when it contrasts with the cake.
+        const shell = flav === 'chocolate' ? 'dipped and decorated by hand' : 'dipped in chocolate and decorated by hand'
+        return `A ${flav} cake on a stick, moulded in ${art} ${shape} shape, ${shell}.`
+      }
+      if (/cake pops/.test(name)) {
+        // NOUN (above) doesn't strip "Cake Pops" — it's a two-word tail no other
+        // category has — so take the flavour off the name here, or every pop
+        // would read "chocolate cake pops cake rolled and dipped".
+        const pop = lower(p.name.replace(/\s*cake\s*pops?\s*$/i, '').trim())
+        return `Bite-size ${pop} cake rolled and dipped in chocolate — by the piece (two or more), a box of six, or twelve.`
+      }
+      if (/strawberry/.test(name)) return 'Fresh strawberries dipped in chocolate and set to a snap.'
+      if (/cookie fries/.test(name)) return 'Cookie dough cut into fries and baked crisp — made for dipping.'
+      if (/macaron/.test(name)) return 'Almond shells with a soft centre, in the day’s flavours.'
+      if (/krispies/.test(name)) return 'Crisp rice and marshmallow, set into squares.'
+      return `${p.name} — freshly baked to order.`
+    default:
+      return `${p.name} — freshly made to order.`
+  }
+}
+
+// Auto-attach allergen tags based on product category + name keywords.
+// Lets us avoid pasting `allergens: [...]` on every line.
+function attachAllergens(p) {
+  const name = p.name.toLowerCase()
+  const isMojito = /mojito|lagoon/.test(name)
+  const isShake = /milkshake|shake/.test(name)
+  const isCoffee = /coffee/.test(name)
+  // Macarons are almond-flour shells — "macaron" is on this list because the
+  // name never says almond, and they went out with no nut warning.
+  const hasNuts = /pistach|almond|nutella|hazelnut|coconut|dubai|macaron/.test(name)
+
+  let tags = []
+  switch (p.category) {
+    case 'Cheesecakes':
+    case 'Milk Cakes':
+    case 'Sponge Cakes':
+    case 'Cookies':
+    case 'Cupcakes':
+    case 'Bakes':
+    case 'Platters':
+    case 'Special Gifts':
+      if (/covered strawberr/.test(name)) {
+        // Fresh fruit dipped in chocolate — no flour, no egg. Chocolate carries
+        // milk, so dairy is declared. (It was getting the bakes' egg + gluten.)
+        tags = ['eggless', 'contains-dairy']
+        break
+      }
+      tags = ['contains-egg', 'contains-dairy', 'contains-gluten', 'eggless-option']
+      // Macaron shells are whipped egg white — "can be made eggless" isn't
+      // something to promise without the owner saying so.
+      if (/macaron/.test(name)) tags = tags.filter((t) => t !== 'eggless-option')
+      if (hasNuts) tags.push('contains-nuts')
+      break
+    case 'Dessert Cups':
+      // Jelly and the grass-jelly pudding are set, not baked: no egg. The
+      // product is named "(Ghas)", which the old /grass/ never matched, so it
+      // was tagged contains-egg. A milk pudding declares its milk.
+      if (/jelly|grass|ghas/.test(name)) tags = /milk/.test(name) ? ['eggless', 'contains-dairy'] : ['eggless']
+      else tags = ['contains-egg', 'contains-dairy', 'eggless-option']
+      break
+    case 'Drinks':
+      if (isShake) {
+        tags = ['contains-dairy']
+        if (hasNuts) tags.push('contains-nuts')
+      } else if (isMojito) {
+        // Fruit, lime and soda. This said `[]`, and an empty list renders
+        // nothing at all — indistinguishable from "we never checked". Say the
+        // true thing instead: there's nothing in it to avoid.
+        tags = ['eggless', 'vegan']
+      } else if (isCoffee || /coffee/i.test(p.group || '') || /latte|macchiato|mochaccino|brew/.test(name)) {
+        // The two "Classic" coffees are served black — no milk, so nothing to
+        // declare, and like the mojitos they say that outright instead of
+        // rendering an empty row. Everything else here is a latte, mocha or
+        // macchiato, which is milk (this branch used to declare nothing at all).
+        tags = /^classic /.test(name) ? ['eggless', 'vegan'] : ['contains-dairy']
+        if (/cookie|biscoff|oreo/.test(name)) tags.push('contains-gluten')
+        if (hasNuts) tags.push('contains-nuts')
+      }
+      break
+    default:
+      tags = []
+  }
+  return { ...p, allergens: tags }
+}
