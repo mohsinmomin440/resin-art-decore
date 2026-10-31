@@ -1,0 +1,215 @@
+/**
+ * products.js — catalogue. Converted from products.seed.json.
+ * Slugs are IDENTICAL to the image folder names in public/images/products/.
+ * price: null → "Ask price on WhatsApp" until the owner sets it.
+ */
+
+export const products = [
+  {
+    slug: 'bismillah-heart-frame',
+    name: 'Bismillah Heart Frame',
+    category: 'Islamic Décor',
+    badge: 'Bestseller',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Heart-shaped resin frame with gold Bismillah calligraphy on a deep purple base.',
+    images: ['bismillah-heart-frame-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'subhanallah-plate',
+    name: 'Subhanallah Plate',
+    category: 'Islamic Décor',
+    badge: 'New',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Scalloped resin plate with gold Subhanallah calligraphy on a purple-to-blue base, on a marble stand.',
+    images: ['subhanallah-plate-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'four-qul-set',
+    name: 'Four Qul Set',
+    category: 'Islamic Décor',
+    badge: 'New',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Set of four scalloped navy resin plates with the four Quls in gold, on yellow stone bases.',
+    images: ['four-qul-set-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'calligraphy-bookmark',
+    name: 'Calligraphy Bookmark',
+    category: 'Islamic Décor',
+    badge: '',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Slim green resin bookmark with gold calligraphy and a tassel.',
+    images: ['calligraphy-bookmark-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'quran-rehal',
+    name: 'Quran Rehal',
+    category: 'Islamic Décor',
+    badge: 'Custom',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Clear resin Quran stand with pressed flowers.',
+    images: ['quran-rehal-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'love-letters',
+    name: 'LOVE Letters',
+    category: 'Love & Gifts',
+    badge: 'Bestseller',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Red-to-pink ombre resin letters L-O-V-E on a white resin base.',
+    images: ['love-letters-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'mom-letters',
+    name: 'MOM Letters',
+    category: 'Love & Gifts',
+    badge: 'Custom',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Clear resin letters with dried flowers on a green resin base.',
+    images: ['mom-letters-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'personalized-photo-heart',
+    name: 'Personalized Photo Heart',
+    category: 'Love & Gifts',
+    badge: 'Custom',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Heart with rose petals and gold flakes, made to hold your picture.',
+    images: ['personalized-photo-heart-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'personalized-flower-heart',
+    name: 'Personalized Flower Heart',
+    category: 'Love & Gifts',
+    badge: 'Custom',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Clear and blue resin heart with pink dried flowers and optional gold initials.',
+    images: ['personalized-flower-heart-1.jpeg', 'personalized-flower-heart-2.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'alphabet-keychain',
+    name: 'Alphabet Keychain',
+    category: 'Keychains',
+    badge: 'Custom',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Resin letter keychains in many colors, with flowers, pearls, gold foil or glitter.',
+    images: ['alphabet-keychain-1.jpeg', 'alphabet-keychain-2.jpeg', 'alphabet-keychain-3.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'pressed-flower-phone-case',
+    name: 'Pressed Flower Phone Case',
+    category: 'Phone Cases',
+    badge: 'New',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Clear phone case with real pressed daisies and ferns set in resin.',
+    images: ['pressed-flower-phone-case-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: true,
+  },
+  {
+    slug: 'butterfly-heart-tray',
+    name: 'Butterfly Heart Tray',
+    category: 'Décor & Accessories',
+    badge: '',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Teal ombre heart tray with butterflies and silver stars on a wood slice.',
+    images: ['butterfly-heart-tray-1.jpeg'],
+    photoStatus: 'ready',
+    customizable: false,
+  },
+  {
+    slug: 'resin-feather',
+    name: 'Resin Feather',
+    category: 'Décor & Accessories',
+    badge: '',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Textured resin feather in blue with gold lines, and in amber orange.',
+    images: ['resin-feather-1.jpeg', 'resin-feather-2.jpeg'],
+    photoStatus: 'ready',
+    customizable: false,
+  },
+  {
+    slug: 'mashallah-scalloped-plate',
+    name: 'Mashallah Scalloped Plate',
+    category: 'Islamic Décor',
+    badge: '',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Scalloped plate with gold Mashallah calligraphy. NO PHOTO YET (only visible in the marketing collage).',
+    images: [],
+    photoStatus: 'needs-photo',
+    customizable: true,
+  },
+  {
+    slug: 'teardrop-earrings',
+    name: 'Teardrop Earrings',
+    category: 'Jewellery',
+    badge: '',
+    price: null,
+    priceNote: '[SET PRICE]',
+    description: 'Deep purple resin teardrop earrings with gold hooks. NO PHOTO YET (only visible in the marketing collage).',
+    images: [],
+    photoStatus: 'needs-photo',
+    customizable: false,
+  },
+]
+
+// Only products with a real photo are buyable.
+export const shopProducts = products.filter((p) => p.photoStatus === 'ready')
+
+export function productById(slug) {
+  return products.find((p) => p.slug === slug)
+}
+
+export function productsByCategory(category) {
+  return shopProducts.filter((p) => p.category === category)
+}
+
+export function relatedProducts(product, limit = 4) {
+  return shopProducts
+    .filter((p) => p.slug !== product.slug && p.category === product.category)
+    .slice(0, limit)
+}
+
+export function priceLabel(product) {
+  if (product.price === null || product.price === undefined) return 'Ask price on WhatsApp'
+  return `₹${product.price}`
+}
+
+export function badgeLabel(badge) {
+  if (!badge) return null
+  return badge
+}
