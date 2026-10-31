@@ -1,0 +1,81 @@
+import { Link } from 'react-router-dom'
+import { usePageMeta } from '../hooks'
+import { useLocalStorage } from '../hooks'
+import { savedListLink } from '../utils/whatsapp'
+import { CONTACTS } from '../data/config'
+import { productById } from '../data/products'
+import { HeartFilled, ShoppingBag, Trash, WhatsApp } from '../components/svg'
+
+export default function Saved() {
+  usePageMeta({ title: 'Saved items', description: 'Your saved resin pieces. Send the whole list on WhatsApp in one message.' })
+  const [items, setItems] = useLocalStorage('rr_saved', [])
+
+  function remove(slug) {
+    setItems(items.filter((s) => s !== slug))
+  }
+
+  function clear() {
+    setItems([])
+  }
+
+  const contact = CONTACTS.find((c) => c.default) || CONTACTS[0]
+  const waHref = savedListLink({ contact, items: items.map((slug) => productById(slug)).filter(Boolean) })
+
+  return (
+    <>
+      <section className="rr-page-hero" data-no-reveal>
+        <div className="container">
+          <div className="rr-page-hero__inner">
+            <div>
+              <span className="eyebrow">Your list</span>
+              <h1>Saved items</h1>
+              <p>Pieces you have hearted. Send the whole list on WhatsApp in one message — we will confirm the details with you.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container py-6">
+        {items.length === 0 ? (
+          <div className="rr-empty">
+            <HeartFilled size={48} className="rr-empty__icon" />
+            <h2>No saved items yet</h2>
+            <p>Heart a product on the shop page to save it here.</p>
+            <Link to="/shop" className="rr-btn mt-4">
+              <ShoppingBag size={16} /> Browse the shop
+            </Link>
+          </div>
+        ) : (
+          <>
+            <ul className="rr-saved-list">
+              {items.map((slug) => {
+                const p = productById(slug)
+                if (!p) return null
+                return (
+                  <li key={slug} className="rr-saved-item">
+                    <div className="rr-saved-item__info">
+                      <span className="rr-saved-item__num">{items.indexOf(slug) + 1}.</span>
+                      <Link to={`/product/${slug}`} className="rr-saved-item__name">{p.name}</Link>
+                    </div>
+                    <button type="button" onClick={() => remove(slug)} aria-label={`Remove ${p.name}`} className="rr-saved-item__remove">
+                      <Trash size={16} />
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+
+            <div className="rr-saved-actions">
+              <button type="button" onClick={clear} className="rr-btn rr-btn--ghost">
+                <Trash size={14} /> Clear list
+              </button>
+              <a href={waHref} target="_blank" rel="noopener noreferrer" className="rr-btn rr-btn--wa">
+                <WhatsApp size={16} /> Send my list on WhatsApp
+              </a>
+            </div>
+          </>
+        )}
+      </section>
+    </>
+  )
+}
