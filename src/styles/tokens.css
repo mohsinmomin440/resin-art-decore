@@ -1,0 +1,92 @@
+/**
+ * tokens.css — Resin Art And Decore
+ *
+ * Every color, font, shadow and motion token in one place.
+ * Exposed to Tailwind v4 via @theme. Components never hard-code a hex.
+ *
+ * Mood: warm, giftable, handmade luxury. Deep red + blush + gold on warm
+ * marble white. Jewelry / gift-shop feel — NOT Cake & Crumb's rose-pink.
+ */
+
+@import "tailwindcss";
+
+/* ─── Tailwind theme tokens ─── */
+@theme {
+  --color-rr-maroon-900: #3F0714;
+  --color-rr-maroon-800: #5A0B1E;
+  --color-rr-maroon-700: #6E0F25;
+  --color-rr-crimson-600: #B3213B;
+  --color-rr-red-500: #C23A4A;
+  --color-rr-rose-300: #E58AA0;
+  --color-rr-blush-100: #FDE9E9;
+  --color-rr-blush-50: #FFF4F2;
+  --color-rr-marble: #FFF8F6;
+  --color-rr-white: #FFFFFF;
+  --color-rr-gold-500: #E0B04A;
+  --color-rr-gold-600: #C9962B;
+  --color-rr-gold-700: #7A5A12;
+  --color-rr-ink: #2B0A12;
+  --color-rr-muted: #6B4A50;
+  --color-rr-line: #F2D4D8;
+  --color-rr-wa: #187A42;
+
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-arabic: 'Amiri', 'Noto Naskh Arabic', Georgia, serif;
+}
+
+/* ─── Root variables (used directly in components + CSS) ─── */
+:root {
+  --rr-maroon-900: #3F0714;
+  --rr-maroon-800: #5A0B1E;
+  --rr-maroon-700: #6E0F25;
+  --rr-crimson-600: #B3213B;
+  --rr-red-500: #C23A4A;
+  --rr-rose-300: #E58AA0;
+  --rr-blush-100: #FDE9E9;
+  --rr-blush-50: #FFF4F2;
+  --rr-marble: #FFF8F6;
+  --rr-white: #FFFFFF;
+  --rr-gold-500: #E0B04A;
+  --rr-gold-600: #C9962B;
+  --rr-gold-700: #7A5A12;
+  --rr-ink: #2B0A12;
+  --rr-muted: #6B4A50;
+  --rr-line: #F2D4D8;
+  --rr-wa: #187A42;
+
+  /* Header height — stepped, not fluid, so sticky offsets stay knowable.
+     = .rr-logo-mark height (64) + header py-2 (16) + 1px border. */
+  --rr-header-h: 81px;
+  --rr-header-h-mobile: 73px;
+
+  /* Interaction motion — one place to retune every button on the site. */
+  --rr-ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --rr-dur: 250ms;
+  --rr-dur-fast: 150ms;
+  --rr-dur-reveal: 700ms;
+  --rr-dur-ambient: 5000ms;
+
+  color-scheme: light;
+}
+
+/* Smaller header below 576px: the logo mark shrinks and the icon group sets
+   the height. No rule below 380 — the mark is smaller than the icons there. */
+@media (max-width: 575.98px) {
+  :root { --rr-header-h: var(--rr-header-h-mobile); }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rr-dur: 0ms;
+    --rr-dur-fast: 0ms;
+    --rr-dur-reveal: 0ms;
+    --rr-dur-ambient: 0ms;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
