@@ -1,0 +1,13 @@
+{
+  "name": "Resin Art And Decore",
+  "short_name": "Resin Art And Decore",
+  "description": "Handmade resin gifts. Order on WhatsApp.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8F6",
+  "theme_color": "#3F0714",
+  "icons": [
+    { "src": "/images/brand/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/images/brand/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
