@@ -18,10 +18,10 @@ import PageFallback from './PageFallback'
 const NO_FOOTER_ROUTES = ['/custom', '/saved']
 
 const ANNOUNCEMENTS = [
-  'Handmade resin gifts • Every piece poured with care',
-  'Custom names, initials & photos crafted to order',
-  'Order directly on WhatsApp • Friendly & personal replies',
-  'Islamic calligraphy, love letters, frames & keychains',
+  'Handmade resin keepsakes • Poured with love in Gujarat',
+  'Custom names, initials & bridal flower preservation',
+  'Crystal-clear UV non-yellowing resin • Shatterproof packaging',
+  'Islamic calligraphy, anniversary frames & personalized gifts',
 ]
 
 export default function Layout({ children }) {

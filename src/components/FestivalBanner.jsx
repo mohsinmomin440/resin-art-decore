@@ -1,9 +1,29 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Close } from './svg'
+import {
+  Close,
+  CrescentStar,
+  Lantern,
+  Heart,
+  Diya,
+  Rakhi,
+  Bouquet,
+  PartyPopper,
+  Sparkle,
+} from './svg'
 import { FESTIVALS, getActiveFestival, isPreview } from '../data/festivals.js'
 
 const DISMISS_KEY = 'rr_festival_dismissed_v1'
+
+const ICONS = {
+  CrescentStar,
+  Lantern,
+  Heart,
+  Diya,
+  Rakhi,
+  Bouquet,
+  PartyPopper,
+}
 
 export default function FestivalBanner() {
   const [festival, setFestival] = useState(() => {
@@ -34,6 +54,8 @@ export default function FestivalBanner() {
 
   if (!festival) return null
 
+  const IconComp = ICONS[festival.icon] || Sparkle
+
   return (
     <div
       className="rr-festival-banner"
@@ -41,7 +63,9 @@ export default function FestivalBanner() {
       aria-label={`${festival.name} promotion`}
       style={{ background: festival.bg, color: festival.fg }}
     >
-      <span aria-hidden style={{ fontSize: '1.2em', flexShrink: 0 }}>{festival.icon}</span>
+      <span aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
+        <IconComp size={18} />
+      </span>
       <span className="rr-festival-banner__msg">{festival.message}</span>
       <Link to={festival.to || '/shop'} className="rr-festival-banner__cta" style={{ color: festival.fg, borderColor: festival.accent }}>
         {festival.cta}

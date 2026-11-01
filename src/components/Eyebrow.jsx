@@ -1,9 +1,11 @@
 /**
  * Eyebrow — 13px, 700, uppercase, letter-spacing .14em, gold-700.
- * Never below 14px for anything a customer must read.
+ * Supports both children and text prop.
  */
-export default function Eyebrow({ children, className = '' }) {
+export default function Eyebrow({ children, text, className = '' }) {
+  const content = children ?? text
+  if (!content) return null
   return (
-    <span className={`eyebrow ${className}`.trim()}>{children}</span>
+    <span className={`eyebrow ${className}`.trim()}>{content}</span>
   )
 }

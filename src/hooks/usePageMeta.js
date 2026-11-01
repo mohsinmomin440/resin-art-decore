@@ -6,13 +6,13 @@
 
 import { useEffect } from 'react'
 
-const DEFAULT_TITLE = 'Resin Art And Decore — Handmade resin gifts'
+const DEFAULT_TITLE = 'Aman Resin Art And Decore — Handmade resin gifts'
 const DEFAULT_DESC =
-  'Handmade resin gifts by Resin Art And Decore — Islamic décor, love letters, keychains, phone cases and custom pieces. Order on WhatsApp.'
+  'Handmade resin gifts by Aman Resin Art And Decore — Islamic décor, love letters, keychains, phone cases and custom pieces. Order on WhatsApp.'
 
 export function usePageMeta({ title, description } = {}) {
   useEffect(() => {
-    const fullTitle = title ? `${title} | Resin Art And Decore` : DEFAULT_TITLE
+    const fullTitle = title ? `${title} | Aman Resin Art And Decore` : DEFAULT_TITLE
     document.title = fullTitle
 
     const desc = description || DEFAULT_DESC

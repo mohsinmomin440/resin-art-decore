@@ -5,7 +5,10 @@ import { productById, relatedProducts, priceLabel } from '../data/products'
 import { productImage, productSrcSet } from '../utils/productImage'
 import { orderLink } from '../utils/whatsapp'
 import { CONTACTS } from '../data/config'
-import { WhatsApp, Heart, HeartFilled, Sparkle } from '../components/svg'
+import { WhatsApp, Heart, HeartFilled, Sparkle, Flower, Package } from '../components/svg'
+import HeartDivider from '../components/HeartDivider'
+import CertBadges from '../components/CertBadges'
+import SectionHeader from '../components/SectionHeader'
 import StickyOrderBar from '../components/StickyOrderBar'
 import ProductCard from '../components/ProductCard'
 import NumberChooser from '../components/NumberChooser'
@@ -16,6 +19,7 @@ export default function Product() {
   const [saved, setSaved] = useLocalStorage('rr_saved', [])
   const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
   const [chooserOpen, setChooserOpen] = useState(false)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [qty, setQty] = useState(1)
 
   usePageMeta({
@@ -34,123 +38,189 @@ export default function Product() {
     image: typeof window !== 'undefined'
       ? new URL(productImage(product.slug, 1, 800), window.location.origin).href
       : productImage(product.slug, 1, 800),
-    brand: { '@type': 'Brand', name: 'Resin Art And Decore' },
+    brand: { '@type': 'Brand', name: 'Aman Resin Art And Decore' },
     offers: { '@type': 'Offer', availability: 'https://schema.org/InStock' },
   } : null)
 
   if (!product) {
     return (
-      <section className="container py-6">
+      <div className="container py-5">
         <div className="rr-empty">
           <Sparkle size={48} className="rr-empty__icon" />
           <h2>Product not found</h2>
           <p>That piece is not in the catalogue.</p>
-          <Link to="/shop" className="rr-btn mt-4">Browse the shop</Link>
+          <Link to="/shop" className="rr-btn mt-3">Browse the shop</Link>
         </div>
-      </section>
+      </div>
     )
   }
 
   const isSaved = saved.includes(product.slug)
   const related = relatedProducts(product)
   const href = orderLink({ contact, product, options: { qty: String(qty) } })
+  const images = product.images && product.images.length > 0 ? product.images : [1]
 
   return (
-    <>
-      <section className="rr-page-hero" data-no-reveal>
-        <div className="container">
-          <nav className="rr-breadcrumb" aria-label="Breadcrumb">
-            <Link to="/shop">Shop</Link> <span>/</span> <span>{product.name}</span>
-          </nav>
-          <div className="rr-page-hero__inner">
-            <div>
-              <span className="eyebrow">{product.category}</span>
-              <h1>{product.name}</h1>
-              <p>{product.description}</p>
-              <div className="rr-page-hero__price">{priceLabel(product)}</div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="rr-product-page">
+      <div className="container py-4">
+        {/* Breadcrumb Navigation */}
+        <nav className="rr-breadcrumb" aria-label="Breadcrumb">
+          <Link to="/">Home</Link>
+          <span aria-hidden>›</span>
+          <Link to="/shop">Shop</Link>
+          <span aria-hidden>›</span>
+          <span className="rr-breadcrumb__current">{product.name}</span>
+        </nav>
 
-      <section className="container py-6">
-        <div className="rr-product">
-          <div className="rr-product__media">
-            <img
-              src={productImage(product.slug, 1, 800)}
-              srcSet={productSrcSet(product.slug, 1)}
-              sizes="(min-width: 768px) 460px, 90vw"
-              alt={product.name}
-              loading="eager"
-              className="rr-product__img"
-            />
-            {(product.images || []).slice(1).map((_, i) => (
+        {/* Unified 2-Column Product Stage */}
+        <div className="rr-product-stage">
+          {/* Left Media Gallery */}
+          <div className="rr-product-stage__gallery">
+            <div className="rr-product-stage__main-wrap">
+              {product.badge && <span className="product-card__badge">{product.badge}</span>}
+              <button
+                type="button"
+                onClick={() => setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])}
+                aria-label={isSaved ? `Remove ${product.name} from saved` : `Save ${product.name}`}
+                className="product-card__save"
+              >
+                {isSaved ? <HeartFilled size={16} /> : <Heart size={16} />}
+              </button>
               <img
-                key={i}
-                src={productImage(product.slug, i + 2, 800)}
-                srcSet={productSrcSet(product.slug, i + 2)}
-                sizes="(min-width: 768px) 460px, 90vw"
-                alt=""
-                loading="lazy"
-                className="rr-product__img rr-product__img--second"
+                src={productImage(product.slug, activeImageIndex + 1, 800)}
+                srcSet={productSrcSet(product.slug, activeImageIndex + 1)}
+                sizes="(min-width: 992px) 480px, 92vw"
+                alt={product.name}
+                className="rr-product-stage__main-img"
               />
-            ))}
+            </div>
+
+            {images.length > 1 && (
+              <div className="rr-product-stage__thumbs">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveImageIndex(i)}
+                    className={`rr-product-stage__thumb${activeImageIndex === i ? ' is-active' : ''}`}
+                    aria-label={`Show photo ${i + 1}`}
+                  >
+                    <img
+                      src={productImage(product.slug, i + 1, 140)}
+                      alt=""
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="rr-product__body">
-            {product.badge && <span className="rr-badge">{product.badge}</span>}
-            <h2>{product.name}</h2>
-            <p className="rr-product__desc">{product.description}</p>
-            <div className="rr-product__price">{priceLabel(product)}</div>
+          {/* Right Product Details */}
+          <div className="rr-product-stage__details">
+            <span className="eyebrow">{product.category}</span>
+            <h1 className="rr-product-stage__title">{product.name}</h1>
+            <div className="rr-product-stage__price">{priceLabel(product)}</div>
+            <HeartDivider width={44} className="rr-product-stage__divider" />
+
+            <p className="rr-product-stage__desc">{product.description}</p>
+
+            <div className="rr-infochips">
+              <span className="rr-infochip">
+                <Sparkle size={13} /> 100% Handcrafted
+              </span>
+              <span className="rr-infochip">
+                <Flower size={13} /> Real Preserved Botanicals
+              </span>
+              <span className="rr-infochip">
+                <Package size={13} /> Shatterproof Packing
+              </span>
+            </div>
 
             {product.customizable && (
-              <div className="rr-product__note">
-                <Sparkle size={16} /> This piece can be customised — add a name, initials or a photo when you order.
+              <div className="rr-product-stage__custom-note">
+                <Sparkle size={15} />
+                <span>
+                  <strong>Personalize this piece:</strong> Custom names, dates, color pigments or preserved flowers can be tailored to your preference.
+                </span>
               </div>
             )}
 
+            {/* Quantity */}
             <div className="rr-product__qty">
-              <span>Quantity</span>
+              <span className="rr-product__qty-label">Quantity:</span>
               <div className="rr-qty">
-                <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  aria-label="Decrease quantity"
+                >
+                  −
+                </button>
                 <span>{qty}</span>
-                <button type="button" onClick={() => setQty((q) => q + 1)}>+</button>
+                <button
+                  type="button"
+                  onClick={() => setQty((q) => q + 1)}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
               </div>
             </div>
 
-            <a href={href} target="_blank" rel="noopener noreferrer" className="rr-btn rr-btn--wa rr-btn--lg" onClick={() => setChooserOpen(true)}>
-              <WhatsApp size={18} /> Order on WhatsApp
-            </a>
+            {/* Action Buttons */}
+            <div className="rr-product-stage__actions">
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rr-btn rr-btn--wa rr-btn--lg rr-product-stage__order-btn"
+                onClick={() => setChooserOpen(false)}
+              >
+                <WhatsApp size={18} /> Order on WhatsApp
+              </a>
 
-            <button
-              type="button"
-              className="rr-btn rr-btn--ghost"
-              onClick={() => setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])}
-            >
-              {isSaved ? <HeartFilled size={16} /> : <Heart size={16} />}
-              {isSaved ? 'Saved' : 'Save for later'}
-            </button>
+              <div className="rr-product-stage__sub-actions">
+                <button
+                  type="button"
+                  className="rr-btn rr-btn--ghost rr-btn--sm"
+                  onClick={() => setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])}
+                >
+                  {isSaved ? <HeartFilled size={15} /> : <Heart size={15} />}
+                  <span>{isSaved ? 'Saved in Wishlist' : 'Save for later'}</span>
+                </button>
 
-            <Link to="/custom" className="rr-btn rr-btn--ghost">
-              <Sparkle size={16} /> Design a custom piece
-            </Link>
+                <Link to="/custom" className="rr-btn rr-btn--ghost rr-btn--sm">
+                  <Sparkle size={15} />
+                  <span>Custom piece builder</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Trust line */}
+            <div className="rr-product-stage__trust">
+              <CertBadges variant="line" />
+            </div>
           </div>
         </div>
-      </section>
 
-      {related.length > 0 && (
-        <section className="container py-6">
-          <h2 className="rr-section-title">You may also like</h2>
-          <div className="product-grid">
-            {related.map((p) => (
-              <ProductCard key={p.slug} product={p} />
-            ))}
+        {/* Related Products */}
+        {related.length > 0 && (
+          <div className="rr-product-stage__related">
+            <SectionHeader
+              eyebrow="You may also love"
+              title="More Handmade Pieces"
+            />
+            <div className="product-grid">
+              {related.map((p) => (
+                <ProductCard key={p.slug} product={p} />
+              ))}
+            </div>
           </div>
-        </section>
-      )}
+        )}
+      </div>
 
       <StickyOrderBar product={product} />
       <NumberChooser open={chooserOpen} onClose={() => setChooserOpen(false)} onSelect={() => {}} />
-    </>
+    </div>
   )
 }

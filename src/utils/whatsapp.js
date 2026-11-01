@@ -5,7 +5,7 @@
  * synchronously inside a click handler so the browser opens the tab itself.
  */
 
-const BUSINESS_NAME = 'Resin Art And Decore'
+const BUSINESS_NAME = 'Aman Resin Art And Decore'
 
 /** Encode once, never twice. */
 export function waText(message) {

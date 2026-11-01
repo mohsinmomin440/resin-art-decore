@@ -1,34 +1,30 @@
-import { useState } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion'
+import { Instagram, ArrowRight } from './svg'
+import { SOCIAL } from '../data/config'
 
-/**
- * VideoStrip — short muted clips that play only when on screen.
- * No video files exist yet, so this renders a placeholder until the owner
- * adds mp4s to public/videos/. It never breaks the page.
- */
 export default function VideoStrip() {
-  const [clips] = useState(() =>
-    Array.from({ length: 4 }, (_, i) => ({
-      file: `clip-${String(i + 1).padStart(2, '0')}`,
-      title: `Process clip ${i + 1}`,
-    }))
-  )
-  const _reduce = useReducedMotion()
-
-  if (clips.length === 0) return null
+  const igUrl = SOCIAL.instagram || 'https://www.instagram.com/m_ahesan.official'
+  const igHandle = SOCIAL.instagramHandle || 'm_ahesan.official'
 
   return (
-    <section className="rr-video-strip">
-      <div className="rr-video-rail">
-        {clips.map((c) => (
-          <div key={c.file} className="rr-video-card">
-            <div className="rr-video-card__media rr-video-card__media--placeholder">
-              <span>Video coming soon</span>
-            </div>
-            <figcaption className="rr-video-card__caption">{c.title}</figcaption>
-          </div>
-        ))}
+    <div className="rr-reels-invite">
+      <div className="rr-reels-invite__icon">
+        <Instagram size={28} />
       </div>
-    </section>
+      <h3 className="rr-reels-invite__title">Watch Live Pours &amp; Reels</h3>
+      <p className="rr-reels-invite__desc">
+        We record the liquid epoxy swirl, gold leaf layering, and demolding process for our custom pieces.
+        Follow our studio journey on Instagram to see every creation come to life.
+      </p>
+      <a
+        href={igUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rr-btn rr-btn--primary"
+      >
+        <Instagram size={16} />
+        <span>Watch Reels @{igHandle}</span>
+        <ArrowRight size={14} />
+      </a>
+    </div>
   )
 }

@@ -4,18 +4,18 @@
  */
 import { HeartMark } from './svg'
 
-export default function HeartDivider({ width = 60 }) {
+export default function HeartDivider({ width = 50, className = '' }) {
   return (
-    <span
-      className="rr-heart-divider"
-      aria-hidden
+    <div
+      className={`rr-heart-divider ${className}`.trim()}
+      aria-hidden="true"
       style={{ '--rr-hd-w': `${width}px` }}
     >
       <span className="rr-heart-divider__line" />
       <span className="rr-heart-divider__heart">
-        <HeartMark size={14} />
+        <HeartMark size={13} />
       </span>
       <span className="rr-heart-divider__line" />
-    </span>
+    </div>
   )
 }

@@ -12,7 +12,7 @@ export const FESTIVALS = [
   {
     id: 'ramadan',
     name: 'Ramadan',
-    icon: '🌙',
+    icon: 'CrescentStar',
     message: 'Ramadan Mubarak — spiritual resin pieces for the holy month.',
     cta: 'Shop Islamic Décor',
     to: '/shop?category=Islamic%20Décor',
@@ -25,7 +25,7 @@ export const FESTIVALS = [
   {
     id: 'eid',
     name: 'Eid',
-    icon: '🌙',
+    icon: 'Lantern',
     message: 'Eid Mubarak — gifts that travel well and last forever.',
     cta: 'Shop Eid Gifts',
     to: '/shop?category=Islamic%20Décor',
@@ -38,7 +38,7 @@ export const FESTIVALS = [
   {
     id: 'valentine',
     name: "Valentine's Day",
-    icon: '❤️',
+    icon: 'Heart',
     message: 'Say it in resin — hearts, letters and photo pieces made to order.',
     cta: 'Shop Love & Gifts',
     to: '/shop?category=Love%20%26%20Gifts',
@@ -49,9 +49,22 @@ export const FESTIVALS = [
     accent: 'var(--rr-gold-500)',
   },
   {
+    id: 'diwali',
+    name: 'Diwali',
+    icon: 'Diya',
+    message: 'Diwali Gifts — hand-poured festive trays, clocks & custom keepsakes.',
+    cta: 'Shop Festive Décor',
+    to: '/shop?category=Décor%20%26%20Accessories',
+    start: new Date(2026, 9, 25),
+    end: new Date(2026, 10, 15),
+    bg: 'var(--rr-maroon-700)',
+    fg: 'var(--rr-gold-500)',
+    accent: 'var(--rr-gold-500)',
+  },
+  {
     id: 'rakhi',
     name: 'Rakhi',
-    icon: '🧵',
+    icon: 'Rakhi',
     message: 'Raksha Bandhan — a handmade token for your brother.',
     cta: 'Shop Rakhi Gifts',
     to: '/shop?category=Keychains',
@@ -64,7 +77,7 @@ export const FESTIVALS = [
   {
     id: 'mothers-day',
     name: "Mother's Day",
-    icon: '💐',
+    icon: 'Bouquet',
     message: 'For the person who kept you in resin and in heart.',
     cta: 'Shop Mother\'s Day',
     to: '/shop?category=Love%20%26%20Gifts',
@@ -77,7 +90,7 @@ export const FESTIVALS = [
   {
     id: 'new-year',
     name: 'New Year',
-    icon: '🎉',
+    icon: 'PartyPopper',
     message: 'A handmade start to the new year.',
     cta: 'Shop New Year',
     to: '/shop',

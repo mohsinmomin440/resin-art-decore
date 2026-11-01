@@ -1,26 +1,30 @@
 /**
- * Footer — brand block, quick links, contact, ordering note, socials.
- * No opening hours, no "All rights reserved", no (R) marks.
+ * Footer — luxury boutique brand block, navigation, collections, atelier contact,
+ * craft assurances, and copyright.
  */
-import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { Phone, Mail, WhatsApp, Clock, Instagram, Facebook } from './svg'
+import { Phone, Mail, WhatsApp, Instagram, Facebook, MapPin } from './svg'
 import Logo from './Logo'
+import CertBadges from './CertBadges'
 import { BUSINESS, CONTACTS, SOCIAL } from '../data/config'
 import { orderLink } from '../utils/whatsapp'
 
 const QUICK_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/custom', label: 'Custom' },
-  { to: '/gallery', label: 'Gallery' },
-  { to: '/about', label: 'About' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/shop', label: 'Shop All Gifts' },
+  { to: '/custom', label: 'Bespoke Orders' },
+  { to: '/gallery', label: 'Atelier Gallery' },
+  { to: '/about', label: 'Our Story' },
+  { to: '/faq', label: 'Craft & FAQ' },
+  { to: '/contact', label: 'Contact Us' },
 ]
 
-const LEGAL_LINKS = [
-  { to: '/faq', label: 'FAQ' },
+const COLLECTION_LINKS = [
+  { to: '/shop?category=Love%20%26%20Gifts', label: 'Bridal & Love Keepsakes' },
+  { to: '/shop?category=Islamic%20Décor', label: 'Islamic Ayah Frames' },
+  { to: '/shop?category=Keychains', label: 'Custom Name Keychains' },
+  { to: '/shop?category=Décor%20%26%20Accessories', label: 'Wall Clocks & Décor' },
+  { to: '/custom', label: 'Floral Preservation' },
 ]
 
 const year = new Date().getFullYear()
@@ -31,87 +35,166 @@ export default function Footer() {
   return (
     <footer className="rr-footer">
       <div className="rr-footer__inner">
-        <div className="rr-footer__brand">
+        {/* Col 1: Brand & Atelier Story */}
+        <div className="rr-footer__col rr-footer__brand">
           <Logo size="footer" />
-          <p className="rr-footer__tagline">{BUSINESS.tagline}</p>
+          <p className="rr-footer__description">
+            Bespoke resin keepsakes, floral bridal preservation, Islamic wall art & personalized gifts, handcrafted to order with crystal-clear non-yellowing epoxy resin.
+          </p>
           <div className="rr-footer__socials">
-            <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="Order on WhatsApp" className="rr-footer__social">
-              <WhatsApp size={16} />
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Order on WhatsApp"
+              className="rr-footer__social"
+              title="Chat on WhatsApp"
+            >
+              <WhatsApp size={17} />
             </a>
-            {SOCIAL.instagram && (
-              <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rr-footer__social">
-                <Instagram size={16} />
+            {SOCIAL.instagram ? (
+              <a
+                href={SOCIAL.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="rr-footer__social"
+              >
+                <Instagram size={17} />
               </a>
-            )}
-            {SOCIAL.facebook && (
-              <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rr-footer__social">
-                <Facebook size={16} />
+            ) : null}
+            {SOCIAL.facebook ? (
+              <a
+                href={SOCIAL.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="rr-footer__social"
+              >
+                <Facebook size={17} />
               </a>
-            )}
-            {BUSINESS.email && (
-              <a href={`mailto:${BUSINESS.email}`} aria-label="Email" className="rr-footer__social">
-                <Mail size={16} />
+            ) : null}
+            {BUSINESS.email ? (
+              <a
+                href={`mailto:${BUSINESS.email}`}
+                aria-label="Email"
+                className="rr-footer__social"
+              >
+                <Mail size={17} />
               </a>
-            )}
+            ) : null}
           </div>
         </div>
 
-        <nav className="rr-footer__links" aria-label="Footer">
-          {QUICK_LINKS.map((l, i) => (
-            <Fragment key={l.to}>
-              {i > 0 && <span aria-hidden>·</span>}
-              <Link to={l.to}>{l.label}</Link>
-            </Fragment>
-          ))}
-        </nav>
-
-        <div className="rr-footer__contact">
-          <h3 className="rr-footer__heading">Contact</h3>
-          <ul className="rr-footer__info">
-            {CONTACTS.map((c) => (
-              <li key={c.id}>
-                <span className="rr-footer__icon"><Phone size={14} /></span>
-                <a href={`https://wa.me/${c.phone}`} target="_blank" rel="noopener noreferrer" className="rr-footer__row">
-                  <span className="rr-footer__label">{c.label}</span>
-                  <span className="rr-footer__value">{c.display}</span>
-                </a>
+        {/* Col 2: Quick Links */}
+        <div className="rr-footer__col">
+          <h3 className="rr-footer__heading">Explore</h3>
+          <ul className="rr-footer__list">
+            {QUICK_LINKS.map((l) => (
+              <li key={l.to}>
+                <Link to={l.to} className="rr-footer__link">
+                  {l.label}
+                </Link>
               </li>
             ))}
-            {BUSINESS.email && (
-              <li>
-                <span className="rr-footer__icon"><Mail size={14} /></span>
-                <a href={`mailto:${BUSINESS.email}`} className="rr-footer__row">
-                  <span className="rr-footer__label">Email</span>
-                  <span className="rr-footer__value">{BUSINESS.email}</span>
-                </a>
-              </li>
-            )}
           </ul>
         </div>
 
-        <div className="rr-footer__order">
-          <h3 className="rr-footer__heading">Ordering</h3>
-          <ul className="rr-footer__info">
-            <li>
-              <span className="rr-footer__icon"><Clock size={14} /></span>
-              <span className="rr-footer__row">
-                <span className="rr-footer__label">Order any day</span>
-                <span className="rr-footer__value">Order on WhatsApp — we confirm the date when you write</span>
-              </span>
-            </li>
+        {/* Col 3: Collections */}
+        <div className="rr-footer__col">
+          <h3 className="rr-footer__heading">Collections</h3>
+          <ul className="rr-footer__list">
+            {COLLECTION_LINKS.map((l) => (
+              <li key={l.to}>
+                <Link to={l.to} className="rr-footer__link">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
           </ul>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" className="rr-footer__cta">
-            <WhatsApp size={16} /> Order on WhatsApp
+        </div>
+
+        {/* Col 4: Atelier & WhatsApp Ordering */}
+        <div className="rr-footer__col rr-footer__atelier">
+          <h3 className="rr-footer__heading">Direct Atelier</h3>
+          <div className="rr-footer__contact-cards">
+            {CONTACTS.map((c) => (
+              <a
+                key={c.id}
+                href={`https://wa.me/${c.phone}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rr-footer__contact-card"
+              >
+                <span className="rr-footer__contact-icon">
+                  <Phone size={14} />
+                </span>
+                <div className="rr-footer__contact-details">
+                  <span className="rr-footer__contact-name">{c.label}</span>
+                  <span className="rr-footer__contact-num">{c.display}</span>
+                </div>
+              </a>
+            ))}
+
+            {BUSINESS.email && (
+              <a
+                href={`mailto:${BUSINESS.email}`}
+                className="rr-footer__contact-card"
+                title="Send us an email"
+              >
+                <span className="rr-footer__contact-icon">
+                  <Mail size={14} />
+                </span>
+                <div className="rr-footer__contact-details">
+                  <span className="rr-footer__contact-name">Direct Email</span>
+                  <span className="rr-footer__contact-num rr-footer__contact-num--email">
+                    {BUSINESS.email}
+                  </span>
+                </div>
+              </a>
+            )}
+          </div>
+
+          {BUSINESS.address?.full && (
+            <div className="rr-footer__order-note">
+              <span className="rr-footer__contact-icon">
+                <MapPin size={14} />
+              </span>
+              <div className="rr-footer__contact-details">
+                <span className="rr-footer__contact-name">Atelier Workshop</span>
+                <span className="rr-footer__contact-num">Kakoshi, Patan, Gujarat (384290)</span>
+              </div>
+            </div>
+          )}
+
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rr-footer__cta-btn"
+          >
+            <WhatsApp size={16} /> Direct WhatsApp Order
           </a>
         </div>
       </div>
 
+      {/* Craft Assurances Band */}
+      <div className="rr-footer__cert-band">
+        <CertBadges variant="line" />
+      </div>
+
+      {/* Bottom Sub-bar */}
       <div className="rr-footer__bottom">
-        <span>© {year} {BUSINESS.name}</span>
+        <span className="rr-footer__copyright">
+          © {year} {BUSINESS.name}. All rights reserved.
+        </span>
+        <span className="rr-footer__origin">
+          Handmade with care in Kakoshi, Gujarat • Pan-India Delivery
+        </span>
         <nav aria-label="Legal" className="rr-footer__legal">
-          {LEGAL_LINKS.map((l) => (
-            <Link key={l.to} to={l.to}>{l.label}</Link>
-          ))}
+          <Link to="/faq">FAQ</Link>
+          <span className="rr-footer__sep">·</span>
+          <Link to="/contact">Contact</Link>
         </nav>
       </div>
     </footer>

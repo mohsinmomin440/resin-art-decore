@@ -4,11 +4,23 @@
  */
 
 export const BUSINESS = {
-  name: 'Resin Art And Decore',
+  name: 'Aman Resin Art And Decore',
   tagline: 'Handmade resin gifts',
-  // [CITY/AREA] — pending owner confirmation. Used in About / Contact / footer.
-  area: '[CITY/AREA]',
-  email: '', // leave empty to hide the email link
+  area: 'Kakoshi, Sidhpur, Patan District, Gujarat',
+  city: 'Kakoshi',
+  state: 'Gujarat',
+  pincode: '384290',
+  address: {
+    full: 'C/o Hasan Rahim Shelia, 1st floor, Dindrolya vas, near jafri co-op credit society, Kakoshi, Tal. Sidhpur, Patan District, Gujarat - 384290',
+    street: 'C/o Hasan Rahim Shelia, 1st floor, Dindrolya vas, near jafri co-op credit society',
+    locality: 'Kakoshi, Tal. Sidhpur',
+    district: 'Patan',
+    city: 'Kakoshi',
+    state: 'Gujarat',
+    pincode: '384290',
+    country: 'India',
+  },
+  email: 'resinartanddecore@gmail.com',
 }
 
 // Two WhatsApp contacts. `default: true` is the one NumberChooser opens first.
@@ -30,6 +42,7 @@ export const CONTACTS = [
 ]
 
 export const SOCIAL = {
-  instagram: '', // set to a handle or URL to show the icon
+  instagram: 'https://www.instagram.com/m_ahesan.official?utm_source=qr&exln=aHp3eTAyM292cDQ1',
+  instagramHandle: 'm_ahesan.official',
   facebook: '', // set to a handle or URL to show the icon
 }

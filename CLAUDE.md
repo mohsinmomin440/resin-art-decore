@@ -1,4 +1,4 @@
-# CLAUDE.md — Resin Art And Decore (standing rules; read every session)
+# CLAUDE.md — Aman Resin Art And Decore (standing rules; read every session)
 
 Handmade resin gifts storefront. Orders happen on WhatsApp. No backend.
 
@@ -9,7 +9,7 @@ All SVG icons/art are drawn by you in `src/components/svg/`.
 
 ## Read first
 `MASTER_PROMPT.md` (the brief) -> `DESIGN.md` (tokens, motion, responsive) -> `src/data/products.seed.json` (catalog).
-`reference/cake-crumb/` is READ-ONLY inspiration for patterns. Never copy its colors, copy text, icons or business logic. Never edit it.
+This project is completely standalone. All code, design, icons, and data are tailored specifically for Aman Resin Art And Decore.
 
 ## Hard rules
 1. **Order = WhatsApp link.** `https://wa.me/<number>?text=<encodeURIComponent(message)>`. Numbers live ONLY in `src/config.js`. Open the link synchronously inside the click handler (before any await), or mobile blocks it.

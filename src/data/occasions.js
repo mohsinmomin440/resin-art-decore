@@ -4,22 +4,22 @@
  */
 
 export const OCCASIONS = [
-  { id: 'birthday', name: 'Birthday', emoji: '🎂' },
-  { id: 'wedding', name: 'Wedding', emoji: '💍' },
-  { id: 'anniversary', name: 'Anniversary', emoji: '🌹' },
-  { id: 'valentine', name: "Valentine's", emoji: '❤️' },
-  { id: 'housewarming', name: 'Housewarming', emoji: '🏡' },
-  { id: 'new-baby', name: 'New Baby', emoji: '👶' },
-  { id: 'graduation', name: 'Graduation', emoji: '🎓' },
-  { id: 'farewell', name: 'Farewell', emoji: '👋' },
-  { id: 'ramadan', name: 'Ramadan', emoji: '🌙' },
-  { id: 'eid', name: 'Eid', emoji: '🌙' },
-  { id: 'diwali', name: 'Diwali', emoji: '🪔' },
-  { id: 'rakhi', name: 'Rakhi', emoji: '🧵' },
-  { id: 'mothers-day', name: "Mother's Day", emoji: '💐' },
-  { id: 'fathers-day', name: "Father's Day", emoji: '👔' },
-  { id: 'friendship', name: 'Friendship', emoji: '🤝' },
-  { id: 'just-because', name: 'Just Because', emoji: '🎁' },
+  { id: 'birthday', name: 'Birthday', icon: 'Cake' },
+  { id: 'wedding', name: 'Wedding', icon: 'Ring' },
+  { id: 'anniversary', name: 'Anniversary', icon: 'Rose' },
+  { id: 'valentine', name: "Valentine's", icon: 'Heart' },
+  { id: 'housewarming', name: 'Housewarming', icon: 'Home' },
+  { id: 'new-baby', name: 'New Baby', icon: 'Baby' },
+  { id: 'graduation', name: 'Graduation', icon: 'Graduation' },
+  { id: 'farewell', name: 'Farewell', icon: 'Farewell' },
+  { id: 'ramadan', name: 'Ramadan', icon: 'CrescentStar' },
+  { id: 'eid', name: 'Eid', icon: 'Lantern' },
+  { id: 'diwali', name: 'Diwali', icon: 'Diya' },
+  { id: 'rakhi', name: 'Rakhi', icon: 'Rakhi' },
+  { id: 'mothers-day', name: "Mother's Day", icon: 'Bouquet' },
+  { id: 'fathers-day', name: "Father's Day", icon: 'Tie' },
+  { id: 'friendship', name: 'Friendship', icon: 'Handshake' },
+  { id: 'just-because', name: 'Just Because', icon: 'Gift' },
 ]
 
 // Map occasion → the categories a gift for it would plausibly come from.

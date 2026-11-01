@@ -3,3 +3,4 @@ dist
 media-originals
 .DS_Store
 *.log
+.claude/

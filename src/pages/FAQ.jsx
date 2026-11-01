@@ -6,7 +6,7 @@ import { orderLink } from '../utils/whatsapp'
 import { CONTACTS } from '../data/config'
 
 export default function FAQ() {
-  usePageMeta({ title: 'FAQ', description: 'Frequently asked questions about Resin Art And Decore — ordering, custom pieces, shipping, payment and caring for resin.' })
+  usePageMeta({ title: 'FAQ', description: 'Frequently asked questions about Aman Resin Art And Decore — ordering, custom pieces, shipping, payment and caring for resin.' })
   useJsonLd('faq-page', {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -24,17 +24,15 @@ export default function FAQ() {
     <>
       <section className="rr-page-hero" data-no-reveal>
         <div className="container">
-          <div className="rr-page-hero__inner">
-            <div>
-              <span className="eyebrow">Help & FAQ</span>
-              <h1>Got Questions?<br />We've Got Answers</h1>
-              <p>Everything you need to know about ordering, custom pieces, shipping, payment and caring for resin. Still stuck? WhatsApp us.</p>
-            </div>
+          <div className="rr-page-hero__inner text-center">
+            <span className="eyebrow">Help &amp; FAQ</span>
+            <h1>Got Questions? We've Got Answers</h1>
+            <p>Everything you need to know about ordering, custom pieces, shipping, payment and caring for resin. Still stuck? WhatsApp us.</p>
           </div>
         </div>
       </section>
 
-      <section className="container py-6">
+      <section className="container py-4">
         <div className="rr-accordion">
           {FAQ_SECTIONS.map((s) => (
             <div key={s.id} className="rr-accordion__item">

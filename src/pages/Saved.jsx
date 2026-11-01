@@ -25,17 +25,15 @@ export default function Saved() {
     <>
       <section className="rr-page-hero" data-no-reveal>
         <div className="container">
-          <div className="rr-page-hero__inner">
-            <div>
-              <span className="eyebrow">Your list</span>
-              <h1>Saved items</h1>
-              <p>Pieces you have hearted. Send the whole list on WhatsApp in one message — we will confirm the details with you.</p>
-            </div>
+          <div className="rr-page-hero__inner text-center">
+            <span className="eyebrow">Wishlist</span>
+            <h1>Saved Pieces</h1>
+            <p>Pieces you have hearted. Send the whole list on WhatsApp in one message — we will confirm the details with you.</p>
           </div>
         </div>
       </section>
 
-      <section className="container py-6">
+      <section className="container py-4">
         {items.length === 0 ? (
           <div className="rr-empty">
             <HeartFilled size={48} className="rr-empty__icon" />

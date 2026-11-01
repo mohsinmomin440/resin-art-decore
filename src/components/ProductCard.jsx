@@ -1,47 +1,31 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { WhatsApp, Heart, HeartFilled } from './svg'
+import { Heart, HeartFilled, ArrowRight } from './svg'
 import { productImage, productSrcSet } from '../utils/productImage'
 import { priceLabel } from '../data/products'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { orderLink } from '../utils/whatsapp'
-import { CONTACTS } from '../data/config'
-import NumberChooser from './NumberChooser'
 
 export default function ProductCard({ product }) {
   const [saved, setSaved] = useLocalStorage('rr_saved', [])
-  const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
-  const [chooserOpen, setChooserOpen] = useState(false)
-  const [tapped, setTapped] = useState(false)
-  const href = orderLink({ contact, product })
 
   const hasSecond = product.images && product.images.length > 1
   const isSaved = saved.includes(product.slug)
 
   function toggleSave(e) {
+    e.preventDefault()
     e.stopPropagation()
     setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])
   }
 
   return (
-    <article className={`product-card${tapped ? ' is-tapped' : ''}`} data-reveal="up">
+    <article className="product-card" data-reveal="up">
       <div className="product-card__media">
-        <button
-          type="button"
-          onClick={() => setTapped(true)}
-          aria-label={`Order ${product.name} on WhatsApp`}
-          className="product-card__order"
-          title="Order on WhatsApp"
-        >
-          <WhatsApp size={14} /> Order
-        </button>
         <button
           type="button"
           onClick={toggleSave}
           aria-label={isSaved ? `Remove ${product.name} from saved` : `Save ${product.name}`}
           className="product-card__save"
         >
-          {isSaved ? <HeartFilled size={16} /> : <Heart size={16} />}
+          {isSaved ? <HeartFilled size={15} /> : <Heart size={15} />}
         </button>
         {product.badge && <span className="product-card__badge">{product.badge}</span>}
 
@@ -73,17 +57,15 @@ export default function ProductCard({ product }) {
           <h3 className="product-card__name">{product.name}</h3>
         </Link>
         <div className="product-card__price">{priceLabel(product)}</div>
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={`/product/${product.slug}`}
           className="product-card__btn"
-          onClick={() => setChooserOpen(true)}
+          aria-label={`View ${product.name} details`}
         >
-          <WhatsApp size={14} /> Order on WhatsApp
-        </a>
+          <span>View Piece</span>
+          <ArrowRight size={13} />
+        </Link>
       </div>
-      <NumberChooser open={chooserOpen} onClose={() => setChooserOpen(false)} onSelect={() => {}} />
     </article>
   )
 }

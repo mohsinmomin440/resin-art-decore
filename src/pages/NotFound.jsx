@@ -3,7 +3,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
 import { Sparkle } from '../components/svg'
 
 export default function NotFound() {
-  usePageMeta({ title: 'Page not found', description: 'That page does not exist. Visit the Resin Art And Decore shop.' })
+  usePageMeta({ title: 'Page not found', description: 'That page does not exist. Visit the Aman Resin Art And Decore shop.' })
   return (
     <section className="rr-page-center">
       <Sparkle size={56} className="rr-page-center__icon" />

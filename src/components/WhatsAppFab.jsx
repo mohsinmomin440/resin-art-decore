@@ -23,12 +23,12 @@ export default function WhatsAppFab({ hidden = false }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Order on WhatsApp"
+      aria-label="Chat with Us on WhatsApp"
       className={`rr-wa-fab${tapped ? ' is-tapped' : ''}${reduce ? ' no-pulse' : ''}`}
       onClick={() => setTapped(true)}
     >
       <WhatsApp size={22} />
-      <span className="rr-wa-fab__label">Order on WhatsApp</span>
+      <span className="rr-wa-fab__label">Chat with Us</span>
     </a>
   )
 }

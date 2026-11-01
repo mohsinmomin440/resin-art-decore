@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import { Close, Search, WhatsApp } from './svg'
+import { NavLink, Link, useLocation } from 'react-router-dom'
+import { Close, Heart } from './svg'
 import Logo from './Logo'
-import SearchOverlay from './SearchOverlay'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { CONTACTS } from '../data/config'
-import { orderLink } from '../utils/whatsapp'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -21,8 +18,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
+  const [saved] = useLocalStorage('rr_saved', [])
   const isMobile = useIsMobile()
   const location = useLocation()
 
@@ -57,25 +53,27 @@ export default function Header() {
       if (e.key === 'Escape') { setOpen(false); return }
       if (e.key !== 'Tab' || !panelRef.current) return
       const focusable = panelRef.current.querySelectorAll(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
       )
-      if (focusable.length === 0) return
+      if (!focusable.length) return
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      if (e.shiftKey && document.activeElement === first) {
+        last.focus()
+        e.preventDefault()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        first.focus()
+        e.preventDefault()
+      }
     }
     document.addEventListener('keydown', onKey)
-    const t = setTimeout(() => panelRef.current?.querySelector('.rr-mobile-menu__close')?.focus(), 100)
-    return () => { document.removeEventListener('keydown', onKey); clearTimeout(t) }
+    return () => document.removeEventListener('keydown', onKey)
   }, [open])
-
-  const waHref = orderLink({ contact })
 
   return (
     <header className={`rr-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="rr-header__bar">
-        <Logo size="md" />
+        <Logo size="header" />
 
         <nav className="rr-header__nav" aria-label="Primary">
           {NAV_LINKS.map((l) => (
@@ -91,24 +89,21 @@ export default function Header() {
         </nav>
 
         <div className="rr-header__actions">
-          <button
-            type="button"
-            aria-label="Search products"
-            aria-expanded={searchOpen}
-            onClick={() => setSearchOpen(true)}
-            className="rr-icon-btn"
+          <Link
+            to="/saved"
+            className="rr-header__saved-btn"
+            aria-label={`Saved pieces (${saved.length})`}
+            title="View saved wishlist"
           >
-            <Search size={20} />
-          </button>
+            <Heart size={18} />
+            {saved.length > 0 && (
+              <span className="rr-header__saved-badge">{saved.length}</span>
+            )}
+          </Link>
 
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rr-btn rr-btn--wa"
-          >
-            <WhatsApp size={16} /> Order on WhatsApp
-          </a>
+          <Link to="/custom" className="rr-btn rr-btn--primary rr-header__custom-cta">
+            Custom Order
+          </Link>
 
           <button
             type="button"
@@ -152,18 +147,28 @@ export default function Header() {
                   {l.label}
                 </NavLink>
               ))}
+              <NavLink
+                to="/saved"
+                onClick={() => setOpen(false)}
+                className={({ isActive }) => `rr-mobile-menu__link${isActive ? ' is-active' : ''}`}
+              >
+                Saved Wishlist {saved.length > 0 ? `(${saved.length})` : ''}
+              </NavLink>
             </nav>
 
             <div className="rr-mobile-menu__footer">
-              <a href={waHref} target="_blank" rel="noopener noreferrer" className="rr-mobile-menu__wa">
-                <WhatsApp size={15} /> Order on WhatsApp
-              </a>
+              <Link
+                to="/custom"
+                onClick={() => setOpen(false)}
+                className="rr-btn rr-btn--primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Start a Custom Order
+              </Link>
             </div>
           </div>
         </div>
       )}
-
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   )
 }

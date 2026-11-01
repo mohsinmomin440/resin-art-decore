@@ -1,70 +1,89 @@
 #!/usr/bin/env node
 /**
  * generate-brand.js — `npm run generate-brand`
- * Writes public/images/brand/logo.svg, favicon.svg, favicon-32.png,
- * apple-touch-icon.png (180), icon-512.png, og-card.jpg (1200x630).
- * Logo = resin-drop + heart mark + "Resin Art And Decore" wordmark in maroon/gold.
+ * Generates all brand assets from media-originals/images/brand/logo.jpg
+ * Outputs: logo.jpg, logo.webp (multiple sizes), apple-touch-icon, favicon-32, icon-512, og-card.
  */
 
 import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
 
+const BRAND_SRC = path.join(process.cwd(), 'media-originals', 'images', 'brand', 'logo.jpg')
 const OUT = path.join(process.cwd(), 'public', 'images', 'brand')
 fs.mkdirSync(OUT, { recursive: true })
 
-const MAROON = '#3F0714'
-const CRIMSON = '#B3213B'
-const GOLD = '#E0B04A'
-const WHITE = '#FFFFFF'
+async function generate() {
+  if (!fs.existsSync(BRAND_SRC)) {
+    console.warn('Source logo not found at:', BRAND_SRC)
+    return
+  }
 
-const LOGO_SVG = (size) => `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 120 120">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${GOLD}"/>
-      <stop offset="100%" stop-color="${CRIMSON}"/>
-    </linearGradient>
-  </defs>
-  <path d="M60 6 C60 6 16 48 16 72 A44 44 0 0 0 104 72 C104 48 60 6 60 6Z" fill="url(#g)"/>
-  <path d="M60 72 C60 72 32 58 32 46 A14 14 0 0 1 60 40 A14 14 0 0 1 88 46 C88 58 60 72 60 72Z" fill="${WHITE}"/>
-</svg>`
+  // Copy raw logo.jpg
+  fs.copyFileSync(BRAND_SRC, path.join(OUT, 'logo.jpg'))
 
-const FAVICON_SVG = LOGO_SVG(32)
+  // 1. WebP Logo Variants
+  await sharp(BRAND_SRC).resize(64, 64).webp({ quality: 90 }).toFile(path.join(OUT, 'logo-64.webp'))
+  await sharp(BRAND_SRC).resize(128, 128).webp({ quality: 90 }).toFile(path.join(OUT, 'logo-128.webp'))
+  await sharp(BRAND_SRC).resize(256, 256).webp({ quality: 90 }).toFile(path.join(OUT, 'logo-256.webp'))
+  await sharp(BRAND_SRC).resize(512, 512).webp({ quality: 90 }).toFile(path.join(OUT, 'logo-512.webp'))
+  await sharp(BRAND_SRC).resize(1024, 1024).webp({ quality: 90 }).toFile(path.join(OUT, 'logo.webp'))
 
-fs.writeFileSync(path.join(OUT, 'logo.svg'), LOGO_SVG(512))
-fs.writeFileSync(path.join(OUT, 'favicon.svg'), FAVICON_SVG)
+  // 2. Apple Touch Icons (180x180 standard)
+  await sharp(BRAND_SRC).resize(180, 180).png().toFile(path.join(OUT, 'apple-touch-icon.png'))
+  await sharp(BRAND_SRC).resize(180, 180).webp({ quality: 90 }).toFile(path.join(OUT, 'apple-touch-icon.webp'))
+  await sharp(BRAND_SRC).resize(400, 400).webp({ quality: 90 }).toFile(path.join(OUT, 'apple-touch-icon-400.webp'))
+  await sharp(BRAND_SRC).resize(800, 800).webp({ quality: 90 }).toFile(path.join(OUT, 'apple-touch-icon-800.webp'))
 
-async function svgToPng(svg, w, h, out) {
-  const png = sharp(Buffer.from(svg)).resize(w, h).png().toBuffer()
-  fs.writeFileSync(out, await png)
+  // 3. Favicon (32x32 standard)
+  await sharp(BRAND_SRC).resize(32, 32).png().toFile(path.join(OUT, 'favicon-32.png'))
+  await sharp(BRAND_SRC).resize(32, 32).webp({ quality: 90 }).toFile(path.join(OUT, 'favicon-32.webp'))
+  await sharp(BRAND_SRC).resize(400, 400).webp({ quality: 90 }).toFile(path.join(OUT, 'favicon-32-400.webp'))
+  await sharp(BRAND_SRC).resize(800, 800).webp({ quality: 90 }).toFile(path.join(OUT, 'favicon-32-800.webp'))
+
+  // 4. PWA Icon 512
+  await sharp(BRAND_SRC).resize(512, 512).png().toFile(path.join(OUT, 'icon-512.png'))
+  await sharp(BRAND_SRC).resize(512, 512).webp({ quality: 90 }).toFile(path.join(OUT, 'icon-512.webp'))
+  await sharp(BRAND_SRC).resize(400, 400).webp({ quality: 90 }).toFile(path.join(OUT, 'icon-512-400.webp'))
+  await sharp(BRAND_SRC).resize(800, 800).webp({ quality: 90 }).toFile(path.join(OUT, 'icon-512-800.webp'))
+
+  // 5. OpenGraph Social Share Card (1200x630)
+  const logo500 = await sharp(BRAND_SRC).resize(480, 480).png().toBuffer()
+  const bg = await sharp({
+    create: {
+      width: 1200,
+      height: 630,
+      channels: 3,
+      background: { r: 255, g: 248, b: 246 }
+    }
+  }).jpeg().toBuffer()
+
+  const textSvg = Buffer.from(`
+    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1180" height="610" fill="none" stroke="#D4A359" stroke-width="4" rx="20" x="10" y="10"/>
+      <text x="570" y="250" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#3F0714">Aman Resin Art</text>
+      <text x="570" y="315" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#3F0714">&amp; Decore</text>
+      <text x="570" y="375" font-family="Georgia, serif" font-size="24" font-style="italic" fill="#B3213B">Handcrafted Keepsakes &amp; Luxury Decor</text>
+      <text x="570" y="450" font-family="system-ui, sans-serif" font-size="19" font-weight="600" fill="#8C6320">Kakoshi, Gujarat • Pan-India Delivery • WhatsApp Ordering</text>
+    </svg>
+  `)
+
+  await sharp(bg)
+    .composite([
+      { input: logo500, top: 75, left: 50 },
+      { input: textSvg, top: 0, left: 0 }
+    ])
+    .jpeg({ quality: 90 })
+    .toFile(path.join(OUT, 'og-card.jpg'))
+
+  await sharp(path.join(OUT, 'og-card.jpg'))
+    .webp({ quality: 90 })
+    .toFile(path.join(OUT, 'og-card.webp'))
+
+  console.log('Brand assets generated successfully from official logo!')
 }
 
-await svgToPng(LOGO_SVG(512), 512, 512, path.join(OUT, 'icon-512.png'))
-await svgToPng(LOGO_SVG(512), 180, 180, path.join(OUT, 'apple-touch-icon.png'))
-await svgToPng(LOGO_SVG(512), 32, 32, path.join(OUT, 'favicon-32.png'))
-
-// OG card — 1200x630, marble background + mark + wordmark.
-const OG_SVG = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#FFF8F6"/>
-  <rect x="0" y="0" width="1200" height="630" fill="url(#ogNoise)" opacity="0.04"/>
-  <defs>
-    <filter id="ogNoise"><feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="4"/></filter>
-    <linearGradient id="ogMark" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${GOLD}"/><stop offset="100%" stop-color="${CRIMSON}"/>
-    </linearGradient>
-  </defs>
-  <g transform="translate(120,150) scale(2)">
-    <path d="M60 6 C60 6 16 48 16 72 A44 44 0 0 0 104 72 C104 48 60 6 60 6Z" fill="url(#ogMark)"/>
-    <path d="M60 72 C60 72 32 58 32 46 A14 14 0 0 1 60 40 A14 14 0 0 1 88 46 C88 58 60 72 60 72Z" fill="${WHITE}"/>
-  </g>
-  <text x="360" y="260" font-family="Georgia, serif" font-size="64" font-weight="700" fill="${MAROON}">Resin Art And Decore</text>
-  <text x="360" y="330" font-family="Georgia, serif" font-size="32" fill="${CRIMSON}" font-style="italic">Handmade resin gifts</text>
-  <text x="120" y="520" font-family="sans-serif" font-size="22" fill="${GOLD}">Order on WhatsApp</text>
-</svg>`
-
-fs.writeFileSync(path.join(OUT, 'og-card.svg'), OG_SVG)
-await sharp(Buffer.from(OG_SVG)).resize(1200, 630).jpeg({ quality: 85 }).toFile(path.join(OUT, 'og-card.jpg'))
-
-console.log('Brand assets written to public/images/brand/')
+generate().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

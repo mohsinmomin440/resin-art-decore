@@ -1,14 +1,15 @@
-# OPEN ITEMS — Resin Art And Decore
+# OPEN ITEMS — Aman Resin Art And Decore
 
 Yeh list un cheezon ki hai jo website ko 100% live launch karne ke liye business owner ko provide karni hain. Code aur structure poori tarah se tayyar hai aur build pass ho raha hai.
 
 ---
 
 ### 1. Business Info & Social Links (`src/data/config.js`)
-- [ ] **Area / City (`BUSINESS.area`):** Abhi `[CITY/AREA]` likha hai. Apna shehar/area name daalna hai (e.g. Ahmedabad, Mumbai, etc.).
-- [ ] **Email (`BUSINESS.email`):** Agar email par queries chahiye toh add karein, warna blank chhod sakte hain (khud-ba-khud icon hide ho jayega).
-- [ ] **Instagram (`SOCIAL.instagram`):** Apna Instagram profile link daalein (e.g., `https://instagram.com/yourhandle`).
-- [ ] **Facebook (`SOCIAL.facebook`):** Apna Facebook page link daalein.
+- [x] **Area / City (`BUSINESS.area`):** Kakoshi, Sidhpur, Patan District, Gujarat (Pincode: 384290).
+- [x] **Email (`BUSINESS.email`):** `resinartanddecore@gmail.com`.
+- [x] **Studio Address (`BUSINESS.address`):** C/o Hasan Rahim shelia, 1st floor, Dindrolya vas, near jafri co-op credit society, Kakoshi, Tal. Sidhpur, Patan District, Gujarat - 384290.
+- [x] **Instagram (`SOCIAL.instagram`):** `https://www.instagram.com/m_ahesan.official?utm_source=qr&exln=aHp3eTAyM292cDQ1` (@m_ahesan.official).
+- [ ] **Facebook (`SOCIAL.facebook`):** Optional - apna Facebook page link daalein.
 
 ---
 
@@ -41,15 +42,16 @@ Photo add karne ke baad `npm run images` chalayein.
 ---
 
 ### 4. About Us Story (`src/pages/About.jsx`)
-- [ ] `[ABOUT STORY]` placeholder ko owner ki real 3-4 lines ki kahani se replace karein (workshop kab shuru hui, resin art ka shauk kaise laga).
+- [x] **Studio Story Confirmed:** Kakoshi, Patan District, Gujarat atelier journey, hand-poured process, and floral keepsake preservation details live.
 
 ---
 
 ### 5. FAQ Confirmations (`src/data/faq.js`)
-- [ ] **Custom Order Timeline:** Ek piece banne me kitne din lagte hain (cure time 24-48 ghante + design).
-- [ ] **Delivery / Shipping:** Local pickup ya courier shipping charges / delivery time.
-- [ ] **Payment terms:** Advance kitna percent liya jata hai (e.g. 50% advance via UPI).
-- [ ] **Care instructions:** Resin ko direct dhoop ya extreme heat se bachane ke instructions.
+- [x] **Custom Order Timeline:** Confirmed (Standard pieces: 3–5 days; Bridal varmala preservation: 7–10 days).
+- [x] **Delivery / Shipping:** Confirmed (Pan-India courier delivery; Local studio pickup in Kakoshi, Gujarat).
+- [x] **Payment terms:** Confirmed (50% UPI advance to pour; balance on HD photo preview approval before courier dispatch).
+- [x] **Care instructions:** Confirmed (Microfiber cloth clean, avoid high heat/harsh direct sun and harsh chemicals).
+- [x] **Gift packaging & bundles:** Confirmed (Luxury presentation, satin ribbon & complimentary personalized greeting card).
 
 ---
 

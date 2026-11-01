@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Filter, Grid } from './svg'
+import { Grid } from './svg'
 import ProductCard from './ProductCard'
 import { CATEGORIES } from '../data/categories'
 import { shopProducts } from '../data/products'
@@ -12,13 +12,22 @@ const SORTS = [
 ]
 
 export default function ProductGrid() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const paramCat = searchParams.get('category')
   const [category, setCategory] = useState(
     paramCat && CATEGORIES.includes(paramCat) ? paramCat : 'All',
   )
   const [sort, setSort] = useState('featured')
-  const [filtersOpen, setFiltersOpen] = useState(false)
+
+  function handleSelectCategory(cat) {
+    setCategory(cat)
+    if (cat === 'All') {
+      searchParams.delete('category')
+    } else {
+      searchParams.set('category', cat)
+    }
+    setSearchParams(searchParams, { replace: true })
+  }
 
   const filtered = useMemo(() => {
     let list = category === 'All' ? shopProducts : shopProducts.filter((p) => p.category === category)
@@ -29,22 +38,39 @@ export default function ProductGrid() {
 
   return (
     <div className="rr-shop">
-      <div className="rr-shop__toolbar">
+      {/* Category Pills Strip (always visible & easily clickable) */}
+      <div className="rr-shop__chips-bar">
         <button
           type="button"
-          className="rr-shop__filters-toggle"
-          onClick={() => setFiltersOpen((o) => !o)}
-          aria-expanded={filtersOpen}
+          className={`rr-chip${category === 'All' ? ' is-active' : ''}`}
+          onClick={() => handleSelectCategory('All')}
         >
-          <Filter size={16} /> Filters
+          All Pieces <span className="rr-chip__n">{shopProducts.length}</span>
         </button>
+        {CATEGORIES.map((c) => {
+          const count = shopProducts.filter((p) => p.category === c).length
+          if (count === 0) return null
+          return (
+            <button
+              key={c}
+              type="button"
+              className={`rr-chip${category === c ? ' is-active' : ''}`}
+              onClick={() => handleSelectCategory(c)}
+            >
+              {c} <span className="rr-chip__n">{count}</span>
+            </button>
+          )
+        })}
+      </div>
 
+      {/* Toolbar: count & sort */}
+      <div className="rr-shop__toolbar">
         <div className="rr-shop__count">
-          {filtered.length} product{filtered.length === 1 ? '' : 's'}
+          Showing <strong>{filtered.length}</strong> {filtered.length === 1 ? 'piece' : 'pieces'}
         </div>
 
         <label className="rr-shop__sort">
-          <span>Sort by</span>
+          <span>Sort:</span>
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
             {SORTS.map((s) => (
               <option key={s.id} value={s.id}>{s.label}</option>
@@ -52,33 +78,6 @@ export default function ProductGrid() {
           </select>
         </label>
       </div>
-
-      {filtersOpen && (
-        <div className="rr-shop__filters">
-          <span className="rr-shop__filters-label">Category</span>
-          <div className="rr-shop__chips">
-            <button
-              type="button"
-              className={`rr-chip${category === 'All' ? ' is-active' : ''}`}
-              onClick={() => setCategory('All')}
-            >All</button>
-            {CATEGORIES.map((c) => {
-              const count = shopProducts.filter((p) => p.category === c).length
-              if (count === 0) return null
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  className={`rr-chip${category === c ? ' is-active' : ''}`}
-                  onClick={() => setCategory(c)}
-                >
-                  {c} <span className="rr-chip__n">{count}</span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
 
       {filtered.length === 0 ? (
         <div className="rr-empty">

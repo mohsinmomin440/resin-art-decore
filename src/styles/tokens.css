@@ -1,11 +1,11 @@
 /**
- * tokens.css — Resin Art And Decore
+ * tokens.css — Aman Resin Art And Decore
  *
  * Every color, font, shadow and motion token in one place.
  * Exposed to Tailwind v4 via @theme. Components never hard-code a hex.
  *
  * Mood: warm, giftable, handmade luxury. Deep red + blush + gold on warm
- * marble white. Jewelry / gift-shop feel — NOT Cake & Crumb's rose-pink.
+ * marble white. Jewelry / gift-shop feel — bespoke handcrafted aesthetic.
  */
 
 @import "tailwindcss";
@@ -33,6 +33,27 @@
   --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-arabic: 'Amiri', 'Noto Naskh Arabic', Georgia, serif;
+
+  /* Layered shadows */
+  --shadow-rr-xs: 0 2px 8px rgba(110, 15, 37, 0.06);
+  --shadow-rr-sm: 0 6px 18px rgba(110, 15, 37, 0.08);
+  --shadow-rr-md: 0 14px 36px rgba(110, 15, 37, 0.14);
+  --shadow-rr-lg: 0 24px 56px rgba(110, 15, 37, 0.22);
+  --shadow-rr-glass: 0 18px 48px rgba(110, 15, 37, 0.16), 0 4px 10px rgba(110, 15, 37, 0.08);
+
+  /* Radii */
+  --radius-rr-xs: 12px;
+  --radius-rr-sm: 18px;
+  --radius-rr-card: 26px;
+  --radius-rr-lg: 34px;
+
+  /* Fluid type scale */
+  --text-display: clamp(2.4rem, 5vw, 4.2rem);
+  --text-h2: clamp(1.8rem, 3.5vw, 2.6rem);
+  --text-h3: clamp(1.5rem, 2.4vw, 2rem);
+
+  /* Container */
+  --container-rr: 1240px;
 }
 
 /* ─── Root variables (used directly in components + CSS) ─── */
@@ -66,6 +87,32 @@
   --rr-dur-fast: 150ms;
   --rr-dur-reveal: 700ms;
   --rr-dur-ambient: 5000ms;
+  --rr-dur-slow: 900ms;
+
+  /* ─── Glass & depth ─── */
+  --rr-glass-bg: rgba(255, 248, 246, 0.82);
+  --rr-glass-bg-strong: rgba(255, 255, 255, 0.94);
+  --rr-glass-border: rgba(224, 176, 74, 0.32);
+  --rr-glass-border-soft: rgba(110, 15, 37, 0.09);
+
+  /* ─── Layered shadows ─── */
+  --rr-shadow-xs: 0 2px 8px rgba(110, 15, 37, 0.06);
+  --rr-shadow-sm: 0 6px 18px rgba(110, 15, 37, 0.08);
+  --rr-shadow-md: 0 14px 36px rgba(110, 15, 37, 0.14);
+  --rr-shadow-lg: 0 24px 56px rgba(110, 15, 37, 0.22);
+  --rr-shadow-glass: 0 18px 48px rgba(110, 15, 37, 0.16), 0 4px 10px rgba(110, 15, 37, 0.08);
+
+  /* ─── Gradients ─── */
+  --rr-gradient-maroon: linear-gradient(160deg, var(--rr-maroon-800) 0%, var(--rr-maroon-900) 100%);
+  --rr-gradient-gold: linear-gradient(120deg, var(--rr-gold-600), var(--rr-gold-500) 55%, var(--rr-gold-600));
+  --rr-gradient-blush: linear-gradient(160deg, var(--rr-blush-50), var(--rr-blush-100));
+  --rr-gradient-soft: linear-gradient(180deg, var(--rr-marble), var(--rr-blush-50));
+
+  /* ─── Radii ─── */
+  --rr-radius-xs: 12px;
+  --rr-radius-sm: 18px;
+  --rr-radius-card: 26px;
+  --rr-radius-lg: 34px;
 
   color-scheme: light;
 }

@@ -20,17 +20,15 @@ export default function Custom() {
     <>
       <section className="rr-page-hero" data-no-reveal>
         <div className="container">
-          <div className="rr-page-hero__inner">
-            <div>
-              <span className="eyebrow">Custom</span>
-              <h1>Design your own piece</h1>
-              <p>Pick a product, add a name, initials, colors and occasion. We build it and message you on WhatsApp.</p>
-            </div>
+          <div className="rr-page-hero__inner text-center">
+            <span className="eyebrow">Custom Creation</span>
+            <h1>Design Your Own Piece</h1>
+            <p>Pick a shape or piece, add custom names, initials, colors and celebration occasion. We build it and confirm with you on WhatsApp.</p>
           </div>
         </div>
       </section>
 
-      <section className="container py-6">
+      <section className="container py-4">
         <div className="rr-builder">
           <div className="rr-builder__steps">
             {[1, 2, 3].map((n) => (
