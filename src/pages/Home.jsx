@@ -4,7 +4,6 @@ import { shopProducts } from '../data/products'
 import { CATEGORY_TILES } from '../data/categories'
 import { BUSINESS } from '../data/config'
 import { productImage } from '../utils/productImage'
-import WhatsAppFab from '../components/WhatsAppFab'
 
 import Eyebrow from '../components/Eyebrow'
 import SectionHeader from '../components/SectionHeader'
@@ -193,6 +192,5 @@ export default function Home() {
       {/* ─── 6. ATELIER COMMUNITY & INSTAGRAM ─── */}
       <InstagramFeed />
     </div>
-    <WhatsAppFab />
   )
 }
