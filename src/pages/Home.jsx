@@ -48,10 +48,10 @@ export default function Home() {
     },
   })
 
-  // 6 featured signature products
+  // 8 featured signature products (2 full rows on desktop; CSS trims to 6 on tablet)
   const featured = shopProducts
     .filter((p) => p.badge || p.customizable)
-    .slice(0, 6)
+    .slice(0, 8)
 
   // Two floating real products for the hero right panel
   const heroCard1 = shopProducts.find((p) => p.slug === 'bismillah-heart-frame') || shopProducts[0]

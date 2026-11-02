@@ -28,7 +28,7 @@
   --color-rr-ink: #2B0A12;
   --color-rr-muted: #6B4A50;
   --color-rr-line: #F2D4D8;
-  --color-rr-wa: #187A42;
+  --color-rr-wa: #6E0F25;
 
   --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
@@ -74,7 +74,13 @@
   --rr-ink: #2B0A12;
   --rr-muted: #6B4A50;
   --rr-line: #F2D4D8;
-  --rr-wa: #187A42;
+  --rr-wa: #6E0F25; /* legacy name — order accents are maroon/gold now (no off-theme green) */
+
+  /* ─── Order / WhatsApp actions: warm gold, "gold = order" ─── */
+  --rr-order-bg: linear-gradient(135deg, #F3D17A 0%, #E0B04A 52%, #C9962B 100%);
+  --rr-order-bg-hover: linear-gradient(135deg, #F8DE94 0%, #EBBE5C 52%, #D4A236 100%);
+  --rr-order-ink: #3F0714;
+  --rr-order-glow: rgba(201, 150, 43, 0.45);
 
   /* Header height — stepped, not fluid, so sticky offsets stay knowable.
      = .rr-logo-mark height (64) + header py-2 (16) + 1px border. */
@@ -113,6 +119,10 @@
   --rr-radius-sm: 18px;
   --rr-radius-card: 26px;
   --rr-radius-lg: 34px;
+
+  /* Content width — grows on large screens (see responsive.css). */
+  --rr-container: 1240px;
+  --rr-gutter: 20px;
 
   color-scheme: light;
 }

@@ -110,9 +110,9 @@ img, video { display: block; max-width: 100%; }
 
 /* FAB pulse ring */
 @keyframes rr-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(24, 122, 66, 0.45); }
-  70%  { box-shadow: 0 0 0 14px rgba(24, 122, 66, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(24, 122, 66, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(224, 176, 74, 0.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(224, 176, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 176, 74, 0); }
 }
 
 /* Page fade */

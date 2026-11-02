@@ -1,0 +1,316 @@
+/**
+ * polish.css — UI / UX refinement layer (imported LAST in main.jsx)
+ *
+ * Palette logic (maroon + gold + blush on warm marble):
+ *   maroon  = brand, headings, primary actions
+ *   crimson = small accents, links, italics
+ *   gold    = "order" actions (WhatsApp), borders, dividers, highlights
+ *   blush   = soft section backgrounds
+ * No green anywhere. WhatsApp / order buttons are gold with maroon ink, so
+ * "gold = order" and they stay visible on both light and maroon surfaces.
+ *
+ * Only tokens from tokens.css are used. Delete this file to get the old look.
+ */
+
+/* ───────── Base polish ───────── */
+::selection {
+  background: var(--rr-gold-500);
+  color: var(--rr-maroon-900);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+:focus-visible {
+  outline: 3px solid var(--rr-gold-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ───────── Buttons ───────── */
+.rr-btn {
+  letter-spacing: 0.01em;
+}
+
+/* Primary: richer maroon with a fine gold edge */
+.rr-btn:not(.rr-btn--wa):not(.rr-btn--ghost):not(.rr-btn--gold) {
+  background: linear-gradient(160deg, var(--rr-maroon-700) 0%, var(--rr-maroon-900) 100%);
+  border-color: rgba(224, 176, 74, 0.45);
+}
+
+/* Order / WhatsApp: gold, maroon ink, soft inner highlight */
+.rr-btn--wa {
+  font-weight: 700;
+  border: 1px solid rgba(255, 244, 214, 0.7);
+  box-shadow:
+    0 8px 22px var(--rr-order-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.rr-btn--wa svg {
+  flex-shrink: 0;
+  color: var(--rr-maroon-800);
+}
+
+.rr-btn--gold {
+  /* keep gold distinct from "order": outlined gold on maroon text */
+  background: linear-gradient(135deg, #FFF6DD 0%, #F6DFA2 100%);
+  border: 1.5px solid var(--rr-gold-500);
+  color: var(--rr-maroon-800);
+  box-shadow: 0 6px 18px rgba(201, 150, 43, 0.25);
+}
+
+@media (hover: hover) {
+  .rr-btn--gold:hover {
+    background: var(--rr-order-bg);
+    color: var(--rr-maroon-900);
+    border-color: var(--rr-gold-600);
+  }
+}
+
+/* ───────── Floating WhatsApp button ───────── */
+.rr-wa-fab {
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  right: calc(22px + env(safe-area-inset-right, 0px));
+  font-weight: 700;
+  border: 2px solid var(--rr-marble);
+  box-shadow:
+    0 12px 30px rgba(63, 7, 20, 0.3),
+    0 0 0 1px rgba(201, 150, 43, 0.55);
+}
+
+.rr-wa-fab svg {
+  color: var(--rr-maroon-800);
+}
+
+.rr-wa-fab:not(.is-tapped):not(.no-pulse) {
+  animation: rr-pulse 4s var(--rr-ease) infinite;
+}
+
+/* Back-to-top: quiet maroon chip, never competes with order button */
+.rr-back-to-top {
+  background: var(--rr-white);
+  color: var(--rr-maroon-700);
+  border: 1px solid var(--rr-line);
+  box-shadow: var(--rr-shadow-sm);
+}
+
+/* ───────── Header ───────── */
+.rr-header {
+  background: rgba(255, 248, 246, 0.9);
+}
+
+.rr-nav-link {
+  font-weight: 600;
+}
+
+.rr-nav-link.is-active::after {
+  height: 3px;
+  bottom: -2px;
+}
+
+/* ───────── Section rhythm: marble → white → blush → white → marble ───────── */
+.rr-home-categories { background: var(--rr-white); }
+
+.rr-home-signature {
+  background: linear-gradient(180deg, var(--rr-blush-100) 0%, var(--rr-blush-50) 100%);
+  border-top: 1px solid var(--rr-line);
+  border-bottom: 1px solid var(--rr-line);
+}
+
+.rr-home-how { background: var(--rr-white); }
+.rr-home-occasions { background: var(--rr-marble); }
+.rr-home-instagram { background: var(--rr-white); }
+
+/* ───────── Category tiles: always centered, never a gap on the right ───────── */
+.rr-category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.rr-category-grid > * {
+  flex: 0 0 calc((100% - 16px) / 2);
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .rr-category-grid { gap: 20px; }
+  .rr-category-grid > * { flex: 0 0 calc((100% - 40px) / 3); }
+}
+
+@media (min-width: 1024px) {
+  .rr-category-grid > * { flex: 1 1 0; min-width: 150px; }
+}
+
+.rr-category-tile {
+  border: 1px solid rgba(224, 176, 74, 0.35);
+}
+
+.rr-category-tile__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(63, 7, 20, 0.94) 0%,
+    rgba(63, 7, 20, 0.5) 38%,
+    rgba(63, 7, 20, 0) 72%
+  );
+}
+
+.rr-category-tile__name {
+  font-size: 21px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* ───────── Product cards ───────── */
+.product-card {
+  border-radius: 22px;
+  border-color: rgba(224, 176, 74, 0.3);
+  box-shadow: var(--rr-shadow-sm);
+}
+
+@media (hover: hover) {
+  .product-card:hover {
+    border-color: rgba(224, 176, 74, 0.7);
+  }
+}
+
+.product-card__cat {
+  color: var(--rr-gold-700);
+  font-weight: 700;
+}
+
+.product-card__price {
+  color: var(--rr-crimson-600);
+  font-weight: 700;
+}
+
+.product-card__btn {
+  background: var(--rr-white);
+  color: var(--rr-maroon-700);
+  border: 1.5px solid var(--rr-maroon-700);
+  min-height: 40px;
+  font-weight: 700;
+}
+
+@media (hover: hover) {
+  .product-card__btn:hover {
+    background: var(--rr-maroon-700);
+    color: #ffffff;
+    border-color: var(--rr-maroon-700);
+  }
+}
+
+.product-card__badge {
+  background: linear-gradient(160deg, var(--rr-maroon-700), var(--rr-maroon-900));
+  color: var(--rr-gold-500);
+  border: 1px solid rgba(224, 176, 74, 0.55);
+}
+
+/* Home "Signature Creations": 8 cards on desktop, 6 on tablet (no orphan row) */
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .rr-home-signature .product-grid > :nth-child(n + 7) {
+    display: none;
+  }
+}
+
+/* ───────── How it works ───────── */
+.rr-home-how__step {
+  background: var(--rr-white);
+  border: 1px solid rgba(224, 176, 74, 0.35);
+  box-shadow: var(--rr-shadow-sm);
+  border-top: 3px solid var(--rr-gold-500);
+}
+
+.rr-home-how__icon {
+  border-color: var(--rr-gold-500);
+  background: var(--rr-blush-50);
+}
+
+.rr-home-how__num {
+  color: rgba(201, 150, 43, 0.5);
+}
+
+.rr-home-how__step-text {
+  font-size: 0.95rem;
+}
+
+.rr-home-how__facts {
+  background: var(--rr-marble);
+  border: 1px solid rgba(224, 176, 74, 0.4);
+  border-radius: 22px;
+  padding: 0.9rem 1.5rem;
+  box-shadow: var(--rr-shadow-xs);
+}
+
+.rr-home-how__facts li {
+  font-size: 0.92rem;
+}
+
+@media (min-width: 768px) {
+  .rr-home-how__facts {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 2rem;
+  }
+}
+
+.rr-home-how__facts li svg {
+  color: var(--rr-gold-700);
+}
+
+/* ───────── Footer ───────── */
+.rr-footer__cta-btn {
+  font-weight: 700;
+  font-size: 14.5px;
+  min-height: 46px;
+  border: 1px solid rgba(255, 244, 214, 0.7);
+}
+
+/* ───────── Contact page: order card ───────── */
+.rr-contact-compact__btn--primary {
+  border-width: 1.5px;
+}
+
+.rr-contact-compact__num {
+  color: var(--rr-maroon-700);
+}
+
+/* ───────── Number chooser (which WhatsApp number) ───────── */
+.rr-chooser__btn {
+  border-color: rgba(224, 176, 74, 0.45);
+}
+
+@media (hover: hover) {
+  .rr-chooser__btn:hover {
+    border-color: var(--rr-gold-600);
+  }
+}
+
+/* ───────── Sticky order bar (product page, mobile) ───────── */
+.rr-sticky-order {
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid rgba(224, 176, 74, 0.45);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+}
+
+.rr-sticky-order__btn {
+  font-weight: 700;
+  border: 1px solid rgba(255, 244, 214, 0.7);
+  min-height: 46px;
+}
+
+/* ───────── Small-screen comfort ───────── */
+@media (max-width: 575.98px) {
+  .rr-hero__title { line-height: 1.1; }
+  .product-card__body { padding: 14px; }
+  .product-card__name { font-size: 18px; }
+}

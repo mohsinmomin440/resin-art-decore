@@ -24,12 +24,12 @@ layout, icons and wording. Reference is for patterns only.
 | --rr-ink | #2B0A12 | body text |
 | --rr-muted | #6B4A50 | secondary text (>= 6:1 on marble) |
 | --rr-line | #F2D4D8 | borders, dividers |
-| --rr-wa | #187A42 | WhatsApp buttons ONLY (white text, 5:1) |
+| --rr-order-bg | gold gradient (#F3D17A → #E0B04A → #C9962B) | WhatsApp / order buttons ONLY, with --rr-order-ink (#3F0714) text |
 
 Rules
 - Gold is never body text on light backgrounds (use gold-700). Gold on maroon is fine.
 - Red fills carry large/bold text only. Small red text uses crimson-600 or maroon-700.
-- WhatsApp green appears only on order/contact actions so people learn "green = order".
+- Gold order buttons appear only on order/contact actions so people learn "gold = order". No green anywhere.
 - No purple/blue gradient washes. Flat color, soft shadows, one subtle marble/noise texture (SVG).
 - Section rhythm alternates: marble -> white -> blush -> marble -> maroon band -> blush -> footer maroon-900.
 - Product photo backdrops are NEVER recolored; the UI frames photos, it does not tint them.
