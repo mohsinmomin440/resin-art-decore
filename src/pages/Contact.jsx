@@ -40,7 +40,7 @@ export default function Contact() {
           {/* Logo Emblem */}
           <div className="rr-contact-compact__logo-wrap">
             <img
-              src="/images/brand/logo-128.webp"
+              src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/brand/logo-128.webp`}
               alt="Aman Resin Art And Decore"
               className="rr-contact-compact__logo"
             />

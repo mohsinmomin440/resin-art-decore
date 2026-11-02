@@ -2,6 +2,7 @@
  * Logo — official brand emblem + wordmark.
  * Size prop: 'sm' | 'md' (default) | 'lg' | 'header' | 'footer'.
  */
+import { Link } from 'react-router-dom'
 
 const SIZES = {
   sm: { mark: 36, word: 13, tagline: 8.5 },
@@ -11,12 +12,14 @@ const SIZES = {
   footer: { mark: 52, word: 18, tagline: 10 },
 }
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 export default function Logo({ size = 'md' }) {
   const s = SIZES[size] || SIZES.md
   return (
-    <a href="/" className="rr-logo" aria-label="Aman Resin Art And Decore — home">
+    <Link to="/" className="rr-logo" aria-label="Aman Resin Art And Decore — home">
       <img
-        src="/images/brand/logo-128.webp"
+        src={`${BASE}/images/brand/logo-128.webp`}
         alt="Aman Resin Art And Decore official emblem"
         width={s.mark}
         height={s.mark}
@@ -31,6 +34,6 @@ export default function Logo({ size = 'md' }) {
           Create • Decorate • Inspire
         </span>
       </div>
-    </a>
+    </Link>
   )
 }

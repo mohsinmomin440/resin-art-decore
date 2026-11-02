@@ -41,8 +41,9 @@ export default function Gallery() {
     })
 
     // 3. Marketing posters
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     const posters = ['marketing-1', 'marketing-2', 'marketing-3'].map((f, i) => ({
-      id: `/images/marketing/${f}.webp`,
+      id: `${base}/images/marketing/${f}.webp`,
       alt: `Studio Showcase ${i + 1}`,
       cat: 'Posters',
       slug: null,
