@@ -1,62 +1,327 @@
 /**
  * responsive.css — Aman Resin Art And Decore
  *
- * Loaded AFTER components.css. One mobile-first layer that makes the site work
- * from 320px phones to 4K monitors:
- *   xs 360 · sm 480 · md 768 · lg 1024 · xl 1280 · 2xl 1536 · 3xl 1920 · 4xl 2560
- * Sections: 1 scale · 2 safe-area · 3 fixed-element stack · 4 grids ·
- *           5 mobile polish · 6 touch · 7 modals/menus · 8 short landscape
+ * Loaded AFTER components.css and BEFORE polish.css.
+ * Comprehensive responsive layer for all viewports:
+ * - Mobile Phones: 320px, 360px, 390px, 480px
+ * - Tablets: 640px, 768px (iPad portrait), 820px, 912px
+ * - Laptops: 1024px (iPad Pro / small laptop), 1280px, 1366px, 1440px
+ * - Desktop & Large Monitors: 1536px, 1920px (Full HD), 2560px (2K/4K)
  */
 
-/* ───────────────────────── 1. Scale up on large screens ───────────────────────── */
-:root { --rr-gutter: clamp(16px, 4.5vw, 48px); }
-
-@media (min-width: 1536px) {
-  :root { --rr-container: 1420px; }
+/* ───────────────────────── 1. Containers & Layout ───────────────────────── */
+:root {
+  --rr-gutter: clamp(16px, 3.5vw, 40px);
+  --rr-container: 1240px;
+  --rr-fab-gap: 20px;
+  --rr-sticky-h: 76px;
 }
+
+@media (min-width: 1440px) {
+  :root { --rr-container: 1340px; }
+}
+
+@media (min-width: 1680px) {
+  :root { --rr-container: 1440px; }
+}
+
 @media (min-width: 1920px) {
-  html { font-size: 112.5%; }              /* 18px base: rem-based type grows */
-  :root { --rr-container: 1560px; }
-}
-@media (min-width: 2560px) {
-  html { font-size: 125%; }                /* 20px base */
-  :root { --rr-container: 1840px; }
-}
-@media (min-width: 3200px) {
-  html { font-size: 150%; }                /* 24px base for 4K */
-  :root { --rr-container: 2200px; }
+  :root { --rr-container: 1520px; }
 }
 
-/* Header bar keeps the same gutters as the page container. */
+/* Page container & header gutters */
 .container,
 .rr-header__bar {
+  width: 100%;
+  max-width: var(--rr-container);
+  margin-left: auto;
+  margin-right: auto;
   padding-left: max(var(--rr-gutter), env(safe-area-inset-left));
   padding-right: max(var(--rr-gutter), env(safe-area-inset-right));
 }
 
-/* overflow-x:hidden turns the layout into a scroll container (breaks sticky
-   on some browsers). `clip` hides the overflow without that side effect. */
-.rr-layout { overflow-x: clip; }
+/* Base layout prevent accidental horizontal overflow */
+.rr-layout {
+  overflow-x: clip;
+  width: 100%;
+  min-height: 100dvh;
+}
 
-/* Long words / names / Arabic never push the page wider than the screen. */
-h1, h2, h3, h4, p, li { overflow-wrap: break-word; }
-.product-card__btn, .rr-btn { white-space: nowrap; }
-img, video, svg, canvas, iframe { max-width: 100%; }
+/* Typography wrapping safeguards */
+h1, h2, h3, h4, h5, h6, p, li, span, a {
+  overflow-wrap: break-word;
+}
 
-/* Header: keep it legible over scrolling content on small screens. */
-.rr-header { background: rgba(255, 248, 246, 0.95); }
+.rr-btn,
+.product-card__btn {
+  white-space: nowrap;
+}
 
-/* ───────────────────────── 2. Safe areas (notch / home bar) ───────────────────── */
+img, video, svg, canvas, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ───────────────────────── 2. Safe Areas ────────────────────────────────── */
 .rr-header { padding-top: env(safe-area-inset-top); }
-.rr-footer { padding-bottom: env(safe-area-inset-bottom); }
+.rr-footer { padding-bottom: max(32px, env(safe-area-inset-bottom)); }
 
-/* ───────────────────────── 3. Fixed-element stack ─────────────────────────────── */
-:root { --rr-fab-gap: 16px; --rr-sticky-h: 76px; }
+/* ───────────────────────── 3. Header & Navigation ───────────────────────── */
+@media (min-width: 1024px) {
+  .rr-header__nav {
+    display: flex !important;
+    align-items: center;
+    gap: clamp(16px, 2vw, 28px);
+  }
 
+  .rr-hamburger {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .rr-header__nav {
+    display: none !important;
+  }
+
+  .rr-hamburger {
+    display: inline-flex !important;
+  }
+}
+
+/* ───────────────────────── 4. Product Grids & Cards ─────────────────────── */
+/* Card must always adapt 100% to its column slot */
+.product-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  /* Home signature creations: 6 pieces fit in a clean 3x2 grid */
+  .rr-home-signature .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .product-grid {
+    gap: 28px;
+  }
+
+  .rr-home-signature .product-grid {
+    gap: 28px;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* ───────────────────────── 5. Category Tiles Grid ───────────────────────── */
+.rr-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .rr-category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rr-category-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .rr-category-grid {
+    gap: 24px;
+  }
+}
+
+/* ───────────────────────── 6. Gallery Grid ──────────────────────────────── */
+.rr-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .rr-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rr-gallery-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .rr-gallery-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 26px;
+  }
+}
+
+/* ───────────────────────── 7. Hero Section ──────────────────────────────── */
+.rr-hero {
+  padding: clamp(24px, 4vw, 56px) 0 clamp(20px, 3.5vw, 44px);
+  position: relative;
+  overflow: hidden;
+}
+
+.rr-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .rr-hero__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .rr-hero__grid {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 64px;
+  }
+}
+
+.rr-hero__panel {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .rr-hero__panel {
+    max-width: none;
+    margin: 0;
+  }
+}
+
+/* ───────────────────────── 8. Product Page Stage ────────────────────────── */
+.rr-product-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .rr-product-stage {
+    grid-template-columns: minmax(320px, 460px) minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rr-product-stage {
+    grid-template-columns: minmax(380px, 500px) minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+/* ───────────────────────── 9. Custom Builder Page ───────────────────────── */
+.rr-builder__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .rr-builder__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rr-builder__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+/* ───────────────────────── 10. Footer ───────────────────────────────────── */
+.rr-footer__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 640px) {
+  .rr-footer__inner {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rr-footer__inner {
+    grid-template-columns: 1.4fr 0.85fr 0.95fr 1.25fr;
+    gap: 40px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .rr-footer__inner {
+    gap: 56px;
+  }
+}
+
+/* ───────────────────────── 11. Fixed Elements ───────────────────────────── */
 .rr-wa-fab {
   right: max(var(--rr-fab-gap), env(safe-area-inset-right));
   bottom: max(var(--rr-fab-gap), env(safe-area-inset-bottom));
 }
+
 .rr-back-to-top {
   left: max(var(--rr-fab-gap), env(safe-area-inset-left));
   bottom: max(var(--rr-fab-gap), env(safe-area-inset-bottom));
@@ -64,117 +329,44 @@ img, video, svg, canvas, iframe { max-width: 100%; }
   height: 44px;
 }
 
-/* Phones: WhatsApp becomes a round icon button so it never covers the CTAs. */
 @media (max-width: 639.98px) {
-  .rr-wa-fab { width: 56px; height: 56px; padding: 0; justify-content: center; gap: 0; }
-  .rr-wa-fab__label { display: none; }
+  .rr-wa-fab {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+  }
+  .rr-wa-fab__label {
+    display: none;
+  }
 }
 
-/* Product pages: the order bar owns the bottom edge on phones/tablets. */
-.rr-sticky-order {
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  padding-left: max(20px, env(safe-area-inset-left));
-  padding-right: max(20px, env(safe-area-inset-right));
-  gap: 12px;
-}
 @media (max-width: 1023.98px) {
   .rr-layout:has(.rr-sticky-order) .rr-back-to-top {
     bottom: calc(var(--rr-sticky-h) + 12px + env(safe-area-inset-bottom));
   }
-  /* last content can scroll clear of the bar */
   .rr-layout:has(.rr-sticky-order) .rr-footer {
     padding-bottom: calc(var(--rr-sticky-h) + env(safe-area-inset-bottom));
   }
 }
 
-/* ───────────────────────── 4. Fluid grids ─────────────────────────────────────── */
-/* Product grid: 2 columns on phones, then as many ~230px columns as fit. */
-@media (min-width: 640px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-/* Ensure featured products show 6 on tablet and 3 on desktop */
-@media (min-width: 640px) {
-  .product-grid .product-card {
-    width: calc(33.33% - 20px);
-  }
-}
-@media (min-width: 1536px) {
-  .rr-gallery-grid { grid-template-columns: repeat(5, 1fr); }
-  .rr-gallery-teaser { grid-template-columns: repeat(7, 1fr); }
-  .rr-instagram-grid { gap: 20px; }
-}
-@media (min-width: 1920px) {
-  .rr-gallery-grid { grid-template-columns: repeat(6, 1fr); }
-  .rr-gallery-teaser { grid-template-columns: repeat(8, 1fr); }
-  .rr-hero__grid { gap: 72px; }
-}
-/* 320–359px: keep the 2-up grids from squeezing their contents. */
-@media (max-width: 359.98px) {
-  .product-grid, .rr-category-grid, .rr-gallery-grid { gap: 10px; }
-  .rr-hero__title { font-size: 2rem; }
-}
-
-/* Never let long copy stretch past a comfortable line length. */
-.rr-hero__lede, .rr-section-header__text { max-width: 68ch; }
-
-/* ───────────────────────── 5. Mobile polish ───────────────────────────────────── */
-/* Festival banner: one tidy line instead of a 4-line block above the hero. */
-@media (max-width: 639.98px) {
-  .rr-festival-banner { padding: 6px 4px 6px 12px; font-size: 12px; gap: 6px; }
-  .rr-festival-banner__msg {
-    text-align: left;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .rr-festival-banner__cta { display: inline-block; margin-left: 4px; }
-}
-
-/* Very narrow phones: message gets full width, CTA drops to its own row. */
-@media (max-width: 399.98px) {
-  .rr-festival-banner { display: grid; grid-template-columns: auto 1fr auto; column-gap: 8px; align-items: center; }
-  .rr-festival-banner__msg { grid-column: 2; grid-row: 1; -webkit-line-clamp: 3; }
-  .rr-festival-banner__cta { grid-column: 2; grid-row: 2; justify-self: start; margin-left: 0; padding: 4px 0; min-height: 44px; }
-  .rr-festival-banner__close { grid-column: 3; grid-row: 1; }
-}
-
-/* Hero buttons: full width, easy thumb targets. */
-@media (max-width: 479.98px) {
-  .rr-hero__ctas { flex-direction: column; gap: 12px; }
-  .rr-hero__ctas > * { width: 100%; justify-content: center; text-align: center; }
-}
-
-/* ───────────────────────── 6. Touch comfort (finger = 44px) ───────────────────── */
+/* ───────────────────────── 12. Touch Comfort (44px min tap targets) ─────── */
 @media (pointer: coarse) {
-  /* 16px inputs stop iOS from zooming the page on focus */
   input, select, textarea,
   .rr-shop__sort select,
-  .rr-field input, .rr-field textarea, .rr-field select { font-size: 16px; }
+  .rr-field input, .rr-field textarea, .rr-field select {
+    font-size: 16px;
+  }
   select, .rr-shop__sort select { min-height: 44px; }
   .rr-qty button { width: 44px; height: 44px; }
-  .rr-footer__legal a, .rr-breadcrumb a {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px;
-  }
-
-  .rr-festival-banner__close {
-    min-width: 44px; min-height: 44px;
-    display: inline-flex; align-items: center; justify-content: center;
-  }
-  .rr-festival-banner__cta { padding: 12px 4px; min-height: 44px; display: inline-flex; align-items: center; }
-  .rr-header__saved-btn, .rr-mobile-menu__close { min-width: 44px; min-height: 44px; }
   .product-card__save { width: 44px; height: 44px; }
-  .product-card__name-link { display: inline-block; padding: 8px 0; }
+  .rr-header__saved-btn, .rr-mobile-menu__close { min-width: 44px; min-height: 44px; }
   .rr-footer__social { width: 44px; height: 44px; }
-  .rr-footer__link { display: inline-flex; align-items: center; min-height: 44px; }
   .rr-chip, .rr-social-pill { min-height: 44px; }
-  .rr-home-how__link, .rr-contact-compact__address-link {
-    display: inline-flex; align-items: center; min-height: 44px;
-  }
 }
 
-/* ───────────────────────── 7. Menus & modals fit any height ───────────────────── */
+/* ───────────────────────── 13. Mobile Menu Sheet ────────────────────────── */
 .rr-mobile-menu__panel {
   height: 100%;
   max-height: 100dvh;
@@ -184,23 +376,22 @@ img, video, svg, canvas, iframe { max-width: 100%; }
   padding-bottom: max(28px, env(safe-area-inset-bottom));
   padding-right: max(24px, env(safe-area-inset-right));
 }
-.rr-chooser, .rr-qv {
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
-           max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-}
-.rr-chooser__panel, .rr-qv__panel {
-  max-height: calc(100dvh - 32px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-@media (max-width: 479.98px) {
-  .rr-chooser__panel, .rr-qv__panel { padding: 24px 18px; border-radius: 24px; }
+
+/* ───────────────────────── 14. Very Small Phones (< 360px) ──────────────── */
+@media (max-width: 359.98px) {
+  .rr-hero__title { font-size: 2rem; }
+  .product-card__body { padding: 12px; }
+  .product-card__name { font-size: 17px; }
 }
 
-/* ───────────────────────── 8. Short landscape phones ──────────────────────────── */
-@media (max-height: 480px) and (orientation: landscape) {
-  .rr-header { position: static; }          /* don't burn 20% of the screen */
-  .rr-festival-banner { display: none; }
-  .rr-hero { padding: 20px 0; }
-  .rr-wa-fab { width: 48px; height: 48px; }
+@media (max-width: 479.98px) {
+  .rr-hero__ctas {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rr-hero__ctas > * {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
 }

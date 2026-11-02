@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-/** True when the viewport is narrower than `bp` (default 768px). Re-renders on resize. */
-export function useIsMobile(bp = 768) {
+/** True when the viewport is narrower than `bp` (default 1024px). Re-renders on resize. */
+export function useIsMobile(bp = 1024) {
   const [mobile, setMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < bp,
   )
