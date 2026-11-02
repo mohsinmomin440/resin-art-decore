@@ -1743,6 +1743,20 @@
   opacity: 0;
 }
 
+/* No image placeholder */
+.product-card__no-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--rr-blush-100) 0%, var(--rr-blush-200) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rr-muted);
+  font-size: 0.875rem;
+  border: 2px dashed var(--rr-line);
+  border-radius: var(--rr-radius-card);
+}
+
 @media (hover: hover) {
 
 .product-card:hover .product-card__img--second {

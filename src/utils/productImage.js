@@ -20,6 +20,11 @@ export function productImage(slug, index = 1, size = 800) {
   return `${BASE}/images/products/${slug}/${photoName(slug, index)}?v=${s}`
 }
 
+/** Check if product has images */
+export function hasImages(product) {
+  return product?.images?.length > 0
+}
+
 /** srcset string: 'file 400w, file 800w, file 1600w'. */
 export function productSrcSet(slug, index = 1) {
   return SIZES.map((s) => `${BASE}/images/products/${slug}/${photoName(slug, index)}?v=${s} ${s}w`).join(', ')

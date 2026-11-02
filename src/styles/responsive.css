@@ -90,7 +90,14 @@ img, video, svg, canvas, iframe { max-width: 100%; }
 /* ───────────────────────── 4. Fluid grids ─────────────────────────────────────── */
 /* Product grid: 2 columns on phones, then as many ~230px columns as fit. */
 @media (min-width: 640px) {
-  .product-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Ensure featured products show 6 on tablet and 3 on desktop */
+@media (min-width: 640px) {
+  .product-grid .product-card {
+    width: calc(33.33% - 20px);
+  }
 }
 @media (min-width: 1536px) {
   .rr-gallery-grid { grid-template-columns: repeat(5, 1fr); }

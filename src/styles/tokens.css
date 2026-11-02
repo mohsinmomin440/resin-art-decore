@@ -74,7 +74,7 @@
   --rr-ink: #2B0A12;
   --rr-muted: #6B4A50;
   --rr-line: #F2D4D8;
-  --rr-wa: #6E0F25; /* legacy name — order accents are maroon/gold now (no off-theme green) */
+  --rr-wa: #6E0F25; /* legacy name — deprecated; use --rr-order-ink for new order buttons */
 
   /* ─── Order / WhatsApp actions: warm gold, "gold = order" ─── */
   --rr-order-bg: linear-gradient(135deg, #F3D17A 0%, #E0B04A 52%, #C9962B 100%);

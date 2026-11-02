@@ -7,28 +7,30 @@ import { useState } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { CONTACTS } from '../data/config'
-import { orderLink } from '../utils/whatsapp'
+import { openWhatsAppOrder } from '../utils/whatsapp'
 import { WhatsApp } from './svg'
 
 export default function WhatsAppFab({ hidden = false }) {
   const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
   const [tapped, setTapped] = useState(false)
   const reduce = useReducedMotion()
-  const href = orderLink({ contact })
 
   if (hidden) return null
 
+  function handleClick(e) {
+    e.preventDefault()
+    openWhatsAppOrder(contact)
+    setTapped(true)
+  }
+
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      onClick={handleClick}
       aria-label="Chat with Us on WhatsApp"
       className={`rr-wa-fab${tapped ? ' is-tapped' : ''}${reduce ? ' no-pulse' : ''}`}
-      onClick={() => setTapped(true)}
     >
       <WhatsApp size={22} />
       <span className="rr-wa-fab__label">Chat with Us</span>
-    </a>
+    </button>
   )
 }
