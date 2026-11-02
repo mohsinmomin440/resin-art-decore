@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://resinartanddecore.com/sitemap.xml

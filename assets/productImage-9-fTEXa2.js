@@ -1,0 +1,1 @@
+var e=`/resin-art-decore/`.replace(/\/$/,``),t=[400,800,1600];function n(e,t=1){return`${e}-${t}.webp`}function r(r,i=1,a=800){let o=t.includes(a)?a:800;return`${e}/images/products/${r}/${n(r,i)}?v=${o}`}function i(e){return e?.images?.length>0}function a(r,i=1){return t.map(t=>`${e}/images/products/${r}/${n(r,i)}?v=${t} ${t}w`).join(`, `)}export{r as n,a as r,i as t};

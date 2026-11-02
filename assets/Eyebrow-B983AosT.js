@@ -1,0 +1,1 @@
+import{t as e}from"./react-vendor-BgGUvCTH.js";var t=e();function n({children:e,text:n,className:r=``}){let i=e??n;return i?(0,t.jsx)(`span`,{className:`eyebrow ${r}`.trim(),children:i}):null}export{n as t};
