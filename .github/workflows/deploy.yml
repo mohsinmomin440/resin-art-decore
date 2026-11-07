@@ -34,8 +34,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true # flip to false once lint is clean
+
       - name: Build
         run: npm run build
+        env:
+          # Set the repository variable BASE_URL to "/" when serving from the custom domain.
+          BASE_URL: ${{ vars.BASE_URL || '/resin-art-decore/' }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
