@@ -29,7 +29,7 @@ const STORY_FEATURES = [
   {
     Icon: Flower,
     title: 'Real Botanicals & Gold',
-    text: 'Real preserved rose petals, baby’s breath florals and radiant 24k gold foil leaf accents.',
+    text: 'Real preserved rose petals, baby’s breath florals and radiant gold foil leaf accents.',
   },
   {
     Icon: Sparkle,
@@ -47,11 +47,11 @@ const WHY_FEATURES = [
   {
     Icon: Package,
     title: 'Pan-India Delivery',
-    text: 'Multi-layer bubble wrap and shatterproof boxed packaging delivered safely across India.',
+    text: 'Carefully packed in protective boxes and delivered across India.',
   },
   {
     Icon: Diamond,
-    title: 'Non-Yellowing Resin',
+    title: 'UV-Resistant Resin',
     text: 'Premium crystal-clear epoxy with UV resistance that preserves timeless clarity for years.',
   },
   {
@@ -219,8 +219,8 @@ export default function About() {
           <h2 className="section-title mt-2">Our Craft Guarantees</h2>
           <HeartDivider width={46} />
           <p className="text-muted" style={{ maxWidth: '520px', margin: '10px auto 0' }}>
-            We adhere to strict artisanal benchmarks — ensuring non-yellowing crystal transparency,
-            shatterproof durability, and flawless glass-smooth finishes.
+            We adhere to strict artisanal benchmarks — ensuring crystal-clear transparency,
+            sturdy finishes, and flawless glass-smooth finishes.
           </p>
         </div>
         <CertBadges variant="pills" />

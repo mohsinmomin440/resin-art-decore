@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { usePageMeta, useJsonLd } from '../hooks'
 import { shopProducts } from '../data/products'
 import { CATEGORY_TILES } from '../data/categories'
-import { BUSINESS } from '../data/config'
-import { productImage } from '../utils/productImage'
+import { BUSINESS, SITE_URL, CONTACTS } from '../data/config'
+import { productImage, productSrcSet } from '../utils/productImage'
 
 import Eyebrow from '../components/Eyebrow'
 import SectionHeader from '../components/SectionHeader'
@@ -13,7 +13,6 @@ import HowItWorks from '../components/HowItWorks'
 import InstagramFeed from '../components/InstagramFeed'
 import CategoryTile from '../components/CategoryTile'
 import ProductCard from '../components/ProductCard'
-import ResinPourBlobs from '../components/svg/ResinPourBlobs'
 import { Check, ArrowRight, Sparkle } from '../components/svg'
 
 export default function Home() {
@@ -28,9 +27,9 @@ export default function Home() {
     '@type': 'LocalBusiness',
     name: BUSINESS.name,
     description: BUSINESS.tagline,
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://resinartanddecore.com',
+    url: SITE_URL,
     email: BUSINESS.email,
-    telephone: '+919428213440',
+    telephone: `+${CONTACTS[0].phone}`,
     address: {
       '@type': 'PostalAddress',
       streetAddress: BUSINESS.address?.street,
@@ -39,10 +38,9 @@ export default function Home() {
       postalCode: BUSINESS.address?.pincode,
       addressCountry: 'IN',
     },
-    priceRange: '₹₹',
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+919428213440',
+      telephone: `+${CONTACTS[0].phone}`,
       contactType: 'customer service',
       email: BUSINESS.email,
     },
@@ -79,7 +77,7 @@ export default function Home() {
               <ul className="rr-hero__ticks">
                 <li>
                   <span className="rr-hero__tick-icon"><Check size={15} /></span>
-                  <span>Crystal-clear UV non-yellowing epoxy resin</span>
+                  <span>Crystal-clear UV-resistant epoxy resin</span>
                 </li>
                 <li>
                   <span className="rr-hero__tick-icon"><Check size={15} /></span>
@@ -97,48 +95,48 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Maroon Luxury Panel */}
+            {/* Right: real product photography */}
             <div className="rr-hero__panel">
-              <ResinPourBlobs className="rr-hero__blobs" />
-
-              {/* Calligraphy Ornament */}
-              <div className="rr-hero__calligraphy" dir="rtl" lang="ar">
-                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-              </div>
-
-              {/* Floating Mini Product Card 1 */}
               {heroCard1 && (
                 <Link
                   to={`/product/${heroCard1.slug}`}
-                  className="rr-hero__float-card rr-hero__float-card--1"
+                  className="rr-hero__photo rr-hero__photo--main"
+                  aria-label={`View ${heroCard1.name}`}
                 >
                   <img
-                    src={productImage(heroCard1.slug, 1, 400)}
+                    src={productImage(heroCard1.slug, 1, 800)}
+                    srcSet={productSrcSet(heroCard1.slug, 1)}
+                    sizes="(min-width: 1024px) 40vw, 92vw"
+                    width="800"
+                    height="800"
                     alt={heroCard1.name}
-                    className="rr-hero__float-img"
+                    fetchPriority="high"
+                    decoding="async"
                   />
-                  <div className="rr-hero__float-info">
-                    <span className="rr-hero__float-badge">Bestseller</span>
-                    <strong className="rr-hero__float-name">{heroCard1.name}</strong>
-                  </div>
                 </Link>
               )}
-
-              {/* Floating Mini Product Card 2 */}
               {heroCard2 && (
                 <Link
                   to={`/product/${heroCard2.slug}`}
-                  className="rr-hero__float-card rr-hero__float-card--2"
+                  className="rr-hero__photo rr-hero__photo--side"
+                  aria-label={`View ${heroCard2.name}`}
                 >
                   <img
                     src={productImage(heroCard2.slug, 1, 400)}
+                    srcSet={productSrcSet(heroCard2.slug, 1)}
+                    sizes="(min-width: 1024px) 16vw, 34vw"
+                    width="400"
+                    height="400"
                     alt={heroCard2.name}
-                    className="rr-hero__float-img"
+                    decoding="async"
                   />
-                  <div className="rr-hero__float-info">
-                    <span className="rr-hero__float-badge">Custom</span>
-                    <strong className="rr-hero__float-name">{heroCard2.name}</strong>
-                  </div>
+                </Link>
+              )}
+              {heroCard1 && (
+                <Link to={`/product/${heroCard1.slug}`} className="rr-hero__caption">
+                  {heroCard1.badge && <span className="rr-hero__caption-badge">{heroCard1.badge}</span>}
+                  <strong className="rr-hero__caption-name">{heroCard1.name}</strong>
+                  <ArrowRight size={14} />
                 </Link>
               )}
             </div>

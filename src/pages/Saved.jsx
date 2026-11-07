@@ -1,25 +1,17 @@
 import { Link } from 'react-router-dom'
-import { usePageMeta } from '../hooks'
-import { useLocalStorage } from '../hooks'
+import { usePageMeta, useSaved, useContact, guardOrder } from '../hooks'
 import { savedListLink } from '../utils/whatsapp'
-import { CONTACTS } from '../data/config'
 import { productById } from '../data/products'
 import { HeartFilled, ShoppingBag, Trash, WhatsApp } from '../components/svg'
 
 export default function Saved() {
   usePageMeta({ title: 'Saved items', description: 'Your saved resin pieces. Send the whole list on WhatsApp in one message.' })
-  const [items, setItems] = useLocalStorage('rr_saved', [])
+  const { saved, remove, clear } = useSaved()
+  const { contact } = useContact()
 
-  function remove(slug) {
-    setItems(items.filter((s) => s !== slug))
-  }
-
-  function clear() {
-    setItems([])
-  }
-
-  const contact = CONTACTS.find((c) => c.default) || CONTACTS[0]
-  const waHref = savedListLink({ contact, items: items.map((slug) => productById(slug)).filter(Boolean) })
+  // Drop slugs that no longer exist in the catalogue.
+  const products = saved.map((slug) => productById(slug)).filter(Boolean)
+  const waHref = savedListLink({ contact, items: products })
 
   return (
     <>
@@ -34,7 +26,7 @@ export default function Saved() {
       </section>
 
       <section className="container py-4">
-        {items.length === 0 ? (
+        {products.length === 0 ? (
           <div className="rr-empty">
             <HeartFilled size={48} className="rr-empty__icon" />
             <h2>No saved items yet</h2>
@@ -46,13 +38,12 @@ export default function Saved() {
         ) : (
           <>
             <ul className="rr-saved-list">
-              {items.map((slug) => {
-                const p = productById(slug)
-                if (!p) return null
+              {products.map((p, i) => {
+                const slug = p.slug
                 return (
                   <li key={slug} className="rr-saved-item">
                     <div className="rr-saved-item__info">
-                      <span className="rr-saved-item__num">{items.indexOf(slug) + 1}.</span>
+                      <span className="rr-saved-item__num">{i + 1}.</span>
                       <Link to={`/product/${slug}`} className="rr-saved-item__name">{p.name}</Link>
                     </div>
                     <button type="button" onClick={() => remove(slug)} aria-label={`Remove ${p.name}`} className="rr-saved-item__remove">
@@ -67,7 +58,13 @@ export default function Saved() {
               <button type="button" onClick={clear} className="rr-btn rr-btn--ghost">
                 <Trash size={14} /> Clear list
               </button>
-              <a href={waHref} target="_blank" rel="noopener noreferrer" className="rr-btn rr-btn--wa">
+              <a
+                href={waHref}
+                onClick={(e) => guardOrder(e, (c) => savedListLink({ contact: c, items: products }))}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rr-btn rr-btn--wa"
+              >
                 <WhatsApp size={16} /> Send my list on WhatsApp
               </a>
             </div>

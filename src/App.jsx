@@ -1,11 +1,10 @@
-import { lazy, Suspense } from 'react'
+import { lazy } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
-import PageFallback from './components/PageFallback'
-import ErrorBoundary, { clearChunkReloadGuard } from './components/ErrorBoundary'
+import { clearChunkReloadGuard } from './components/ErrorBoundary'
 
-// Lazy-loaded routes — keep the initial bundle small. Home is eager (it is the
-// landing page and carries the LCP hero art).
+// Lazy-loaded routes — keep the initial bundle small. Layout supplies the
+// Suspense + ErrorBoundary around them.
 const Home = lazy(() => import('./pages/Home'))
 const Shop = lazy(() => import('./pages/Shop'))
 const Product = lazy(() => import('./pages/Product'))
@@ -15,6 +14,7 @@ const Gallery = lazy(() => import('./pages/Gallery'))
 const About = lazy(() => import('./pages/About'))
 const FAQ = lazy(() => import('./pages/FAQ'))
 const Contact = lazy(() => import('./pages/Contact'))
+const Policies = lazy(() => import('./pages/Policies'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Re-arm the one-shot chunk-reload guard once the app renders, so a later
@@ -24,22 +24,19 @@ clearChunkReloadGuard()
 export default function App() {
   return (
     <Layout>
-      <ErrorBoundary>
-        <Suspense fallback={<PageFallback />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:slug" element={<Product />} />
-            <Route path="/custom" element={<Custom />} />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:slug" element={<Product />} />
+        <Route path="/custom" element={<Custom />} />
+        <Route path="/saved" element={<Saved />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/policies" element={<Policies />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Layout>
   )
 }

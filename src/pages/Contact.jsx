@@ -1,6 +1,6 @@
 import { usePageMeta, useJsonLd } from '../hooks'
-import { BUSINESS, CONTACTS, SOCIAL } from '../data/config'
-import { WhatsApp, Clock, MapPin, Mail, Instagram, Facebook, Sparkle, ArrowRight } from '../components/svg'
+import { BUSINESS, CONTACTS, SOCIAL, SITE_URL } from '../data/config'
+import { WhatsApp, MapPin, Mail, Instagram, Facebook, Sparkle, ArrowRight } from '../components/svg'
 
 export default function Contact() {
   usePageMeta({
@@ -17,7 +17,8 @@ export default function Contact() {
       '@type': 'LocalBusiness',
       name: BUSINESS.name,
       email: BUSINESS.email,
-      telephone: '+919428213440',
+      telephone: `+${CONTACTS[0].phone}`,
+      url: SITE_URL,
       address: {
         '@type': 'PostalAddress',
         streetAddress: BUSINESS.address?.street,
@@ -49,8 +50,8 @@ export default function Contact() {
           <span className="eyebrow">Direct Atelier</span>
           <h1 className="rr-contact-compact__title">Get in Touch</h1>
           <p className="rr-contact-compact__desc">
-            Har order aur custom design WhatsApp par directly confirm hota hai.
-            Neeche diye gaye number par tap karke direct chat start karein!
+            Every order and custom design is confirmed directly on WhatsApp.
+            Tap a number below to start a chat.
           </p>
 
           {/* 2 WhatsApp Direct Action Buttons */}
@@ -131,16 +132,12 @@ export default function Contact() {
           {/* Quick Info Bar */}
           <div className="rr-contact-compact__meta">
             <div className="rr-contact-compact__meta-item">
-              <Clock size={16} />
-              <span>9:00 AM – 9:00 PM (Daily)</span>
-            </div>
-            <div className="rr-contact-compact__meta-item">
               <MapPin size={16} />
               <span>Kakoshi, Patan • Pan-India Delivery</span>
             </div>
             <div className="rr-contact-compact__meta-item">
               <Sparkle size={16} />
-              <span>100% Hand-Poured to Order</span>
+              <span>Hand-poured to order</span>
             </div>
           </div>
 

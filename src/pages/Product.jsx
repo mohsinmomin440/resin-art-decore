@@ -1,25 +1,25 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { usePageMeta, useJsonLd, useLocalStorage } from '../hooks'
+import { usePageMeta, useJsonLd, useSaved, useContact, guardOrder } from '../hooks'
 import { productById, relatedProducts, priceLabel } from '../data/products'
 import { productImage, productSrcSet } from '../utils/productImage'
 import { orderLink } from '../utils/whatsapp'
-import { CONTACTS } from '../data/config'
+import { SITE_URL } from '../data/config'
 import { WhatsApp, Heart, HeartFilled, Sparkle, Flower, Package } from '../components/svg'
 import HeartDivider from '../components/HeartDivider'
 import CertBadges from '../components/CertBadges'
 import SectionHeader from '../components/SectionHeader'
 import StickyOrderBar from '../components/StickyOrderBar'
 import ProductCard from '../components/ProductCard'
-import NumberChooser from '../components/NumberChooser'
+
+const FLOWER_WORDS = /flower|petal|botanical|daisies|fern/i
 
 export default function Product() {
   const { slug = '' } = useParams()
   const product = productById(slug)
-  const [saved, setSaved] = useLocalStorage('rr_saved', [])
-  const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
-  const [chooserOpen, setChooserOpen] = useState(false)
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const { isSaved: isSavedFn, toggle } = useSaved()
+  const { contact } = useContact()
+  const [activeImage, setActiveImage] = useState({ slug, index: 0 })
   const [qty, setQty] = useState(1)
 
   usePageMeta({
@@ -27,6 +27,8 @@ export default function Product() {
     description: product
       ? `${product.name} — ${product.category}. Handmade resin piece. Order on WhatsApp.`
       : 'Handmade resin piece. Order on WhatsApp.',
+    image: product ? productImage(product.slug, 1, 800) : undefined,
+    noindex: !product,
   })
 
   useJsonLd('product', product ? {
@@ -35,11 +37,18 @@ export default function Product() {
     name: product.name,
     description: product.description,
     category: product.category,
-    image: typeof window !== 'undefined'
-      ? new URL(productImage(product.slug, 1, 800), window.location.origin).href
-      : productImage(product.slug, 1, 800),
+    image: new URL(productImage(product.slug, 1, 800), window.location.origin).href,
     brand: { '@type': 'Brand', name: 'Aman Resin Art And Decore' },
-    offers: { '@type': 'Offer', availability: 'https://schema.org/InStock' },
+    // Only publish an Offer when a real price exists — Google rejects price-less offers.
+    ...(product.price != null && {
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'INR',
+        price: String(product.price),
+        url: `${SITE_URL}/product/${product.slug}`,
+        availability: 'https://schema.org/InStock',
+      },
+    }),
   } : null)
 
   if (!product) {
@@ -55,10 +64,14 @@ export default function Product() {
     )
   }
 
-  const isSaved = saved.includes(product.slug)
+  const isSaved = isSavedFn(product.slug)
   const related = relatedProducts(product)
-  const href = orderLink({ contact, product, options: { qty: String(qty) } })
+  const orderOptions = { qty: qty > 1 ? String(qty) : '' }
+  const href = orderLink({ contact, product, options: orderOptions })
   const images = product.images && product.images.length > 0 ? product.images : [1]
+  // Selected thumbnail resets automatically when navigating to another product.
+  const activeImageIndex = activeImage.slug === product.slug ? activeImage.index : 0
+  const mentionsFlowers = FLOWER_WORDS.test(product.description)
 
   return (
     <div className="rr-product-page">
@@ -80,8 +93,9 @@ export default function Product() {
               {product.badge && <span className="product-card__badge">{product.badge}</span>}
               <button
                 type="button"
-                onClick={() => setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])}
+                onClick={() => toggle(product.slug)}
                 aria-label={isSaved ? `Remove ${product.name} from saved` : `Save ${product.name}`}
+                aria-pressed={isSaved}
                 className="product-card__save"
               >
                 {isSaved ? <HeartFilled size={16} /> : <Heart size={16} />}
@@ -90,6 +104,8 @@ export default function Product() {
                 src={productImage(product.slug, activeImageIndex + 1, 800)}
                 srcSet={productSrcSet(product.slug, activeImageIndex + 1)}
                 sizes="(min-width: 992px) 480px, 92vw"
+                width="800"
+                height="800"
                 alt={product.name}
                 className="rr-product-stage__main-img"
               />
@@ -101,7 +117,7 @@ export default function Product() {
                   <button
                     key={i}
                     type="button"
-                    onClick={() => setActiveImageIndex(i)}
+                    onClick={() => setActiveImage({ slug: product.slug, index: i })}
                     className={`rr-product-stage__thumb${activeImageIndex === i ? ' is-active' : ''}`}
                     aria-label={`Show photo ${i + 1}`}
                   >
@@ -126,14 +142,18 @@ export default function Product() {
 
             <div className="rr-infochips">
               <span className="rr-infochip">
-                <Sparkle size={13} /> 100% Handcrafted
+                <Sparkle size={13} /> Handmade
               </span>
-              <span className="rr-infochip">
-                <Flower size={13} /> Real Preserved Botanicals
-              </span>
-              <span className="rr-infochip">
-                <Package size={13} /> Shatterproof Packing
-              </span>
+              {mentionsFlowers && (
+                <span className="rr-infochip">
+                  <Flower size={13} /> Real pressed flowers
+                </span>
+              )}
+              {product.customizable && (
+                <span className="rr-infochip">
+                  <Package size={13} /> Made to order
+                </span>
+              )}
             </div>
 
             {product.customizable && (
@@ -174,7 +194,7 @@ export default function Product() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rr-btn rr-btn--wa rr-btn--lg rr-product-stage__order-btn"
-                onClick={() => setChooserOpen(false)}
+                onClick={(e) => guardOrder(e, (c) => orderLink({ contact: c, product, options: orderOptions }))}
               >
                 <WhatsApp size={18} /> Order on WhatsApp
               </a>
@@ -183,7 +203,7 @@ export default function Product() {
                 <button
                   type="button"
                   className="rr-btn rr-btn--ghost rr-btn--sm"
-                  onClick={() => setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])}
+                  onClick={() => toggle(product.slug)}
                 >
                   {isSaved ? <HeartFilled size={15} /> : <Heart size={15} />}
                   <span>{isSaved ? 'Saved in Wishlist' : 'Save for later'}</span>
@@ -219,8 +239,7 @@ export default function Product() {
         )}
       </div>
 
-      <StickyOrderBar product={product} />
-      <NumberChooser open={chooserOpen} onClose={() => setChooserOpen(false)} onSelect={() => {}} />
+      <StickyOrderBar product={product} options={orderOptions} />
     </div>
   )
 }

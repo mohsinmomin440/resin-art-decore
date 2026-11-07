@@ -22,14 +22,11 @@ export default function Shop() {
         name: p.name,
         description: p.description,
         category: p.category,
-        image: typeof window !== 'undefined'
-          ? new URL(productImage(p.slug, 1, 800), window.location.origin).href
-          : productImage(p.slug, 1, 800),
+        image: new URL(productImage(p.slug, 1, 800), window.location.origin).href,
         brand: { '@type': 'Brand', name: 'Aman Resin Art And Decore' },
-        offers: {
-          '@type': 'Offer',
-          availability: 'https://schema.org/InStock',
-        },
+        ...(p.price != null && {
+          offers: { '@type': 'Offer', priceCurrency: 'INR', price: String(p.price), availability: 'https://schema.org/InStock' },
+        }),
       },
     })),
   })
@@ -44,7 +41,7 @@ export default function Shop() {
             <HeartDivider width={48} />
             <p>
               Islamic calligraphy, personalized love letters, keychains, and timeless keepsake gifts.
-              Every single piece is hand-poured with crystal-clear UV resin, preserved florals, and crafted for your milestones.
+              Every piece is hand-poured with UV-resistant resin and made for your milestones.
             </p>
           </div>
         </div>

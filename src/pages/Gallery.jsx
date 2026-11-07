@@ -22,6 +22,8 @@ export default function Gallery() {
     shopProducts.forEach((p) => {
       list.push({
         id: productImage(p.slug, 1, 800),
+        full: productImage(p.slug, 1, 1600),
+        index: 1,
         alt: p.name,
         cat: p.category,
         slug: p.slug,
@@ -32,6 +34,8 @@ export default function Gallery() {
         p.images.slice(1).forEach((_, idx) => {
           list.push({
             id: productImage(p.slug, idx + 2, 800),
+            full: productImage(p.slug, idx + 2, 1600),
+            index: idx + 2,
             alt: `${p.name} (Detail ${idx + 2})`,
             cat: p.category,
             slug: p.slug,
@@ -43,7 +47,8 @@ export default function Gallery() {
     // 3. Marketing posters
     const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     const posters = ['marketing-1', 'marketing-2', 'marketing-3'].map((f, i) => ({
-      id: `${base}/images/marketing/${f}.webp`,
+      id: `${base}/images/marketing/${f}-800.webp`,
+      full: `${base}/images/marketing/${f}.webp`,
       alt: `Studio Showcase ${i + 1}`,
       cat: 'Posters',
       slug: null,
