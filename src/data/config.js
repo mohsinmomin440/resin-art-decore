@@ -3,6 +3,9 @@
  * Empty social fields mean "do not render the icon".
  */
 
+// Public production URL — used for canonical / Open Graph / sitemap (not for asset paths).
+export const SITE_URL = 'https://resinartanddecore.com'
+
 export const BUSINESS = {
   name: 'Aman Resin Art And Decore',
   tagline: 'Handmade resin gifts',

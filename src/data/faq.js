@@ -35,11 +35,11 @@ export const FAQ_SECTIONS = [
       },
       {
         q: 'How long does a custom piece take?',
-        a: 'Standard resin pieces take 3 to 5 days to hand-pour and fully cure to diamond clarity. Special bridal varmala or fresh bouquet preservation pieces take 7 to 10 days for gentle flower dehydration and multi-layer pouring.',
+        a: 'Standard resin pieces take 3 to 5 days to hand-pour and fully cure to a crystal-clear finish. Special bridal varmala or fresh bouquet preservation pieces take 7 to 10 days for gentle flower dehydration and multi-layer pouring.',
       },
       {
         q: 'Can I choose the colors?',
-        a: 'Absolutely. We offer a rich spectrum of mica pigments (Emerald Green, Royal Maroon, Sapphire Blue, Pearl White, Rose Quartz) and foil leaf accents (24k Gold, Silver, Rose Gold). Tell us your theme on WhatsApp!',
+        a: 'Absolutely. We offer a rich spectrum of mica pigments (Emerald Green, Royal Maroon, Sapphire Blue, Pearl White, Rose Quartz) and foil leaf accents (Gold, Silver, Rose Gold). Tell us your theme on WhatsApp!',
       },
     ],
   },
@@ -53,7 +53,7 @@ export const FAQ_SECTIONS = [
       },
       {
         q: 'How much does delivery cost?',
-        a: 'Delivery charges depend on the package weight and destination city (typically ₹60 to ₹120 for small pieces across Gujarat, and standard domestic courier rates for outstation delivery). We confirm the exact delivery charge upfront before you confirm.',
+        a: 'Delivery charges depend on the package weight and destination city (courier rates apply). We confirm the exact delivery charge upfront before you confirm.',
       },
       {
         q: 'Can I pick up my order myself?',

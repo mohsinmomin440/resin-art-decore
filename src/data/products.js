@@ -1,5 +1,5 @@
 /**
- * products.js — catalogue. Converted from products.seed.json.
+ * products.js — the catalogue (single source of truth).
  * Slugs are IDENTICAL to the image folder names in public/images/products/.
  * price: null → "Ask price on WhatsApp" until the owner sets it.
  */
@@ -190,8 +190,9 @@ export const products = [
 // Only products with a real photo are buyable.
 export const shopProducts = products.filter((p) => p.photoStatus === 'ready')
 
+/** Buyable product by slug. Products without a photo are not reachable. */
 export function productById(slug) {
-  return products.find((p) => p.slug === slug)
+  return shopProducts.find((p) => p.slug === slug)
 }
 
 export function productsByCategory(category) {

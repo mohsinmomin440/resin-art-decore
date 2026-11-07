@@ -62,3 +62,13 @@ Photo add karne ke baad `npm run images` chalayein.
 
 ### 7. Process Videos (Optional) (`public/videos/`)
 - [ ] Agar resin pour ya finish karte waqt ke 10-15 second ke short clips (mp4) hain, toh `public/videos/` me daal sakte hain process reel ke liye.
+
+---
+
+### 8. Confirm before launch (added in code review)
+- [ ] **Returns / damage policy:** `src/pages/Policies.jsx` currently says "message us on WhatsApp with photos and we will sort it out". Replace with your real terms.
+- [ ] **Opening hours:** removed from Contact page (was unconfirmed). Add back only if confirmed.
+- [ ] **Delivery charges:** exact rupee range removed from FAQ. Add real charges if you want to show them.
+- [ ] **Festival dates:** `MOVEABLE` table in `src/data/festivals.js` is approximate (2026–2027). Confirm Ramadan, Eid, Rakhi and Diwali dates each year.
+- [ ] **"UV-resistant" / gold-leaf wording:** confirm the resin and foil you actually use before claiming more.
+- [ ] **Domain:** if resinartanddecore.com is connected, set the GitHub repository variable `BASE_URL` to `/`.
