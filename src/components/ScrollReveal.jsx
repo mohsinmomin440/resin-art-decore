@@ -34,11 +34,6 @@ const STAGGER = 80
 const MAX_DELAY = 400
 
 function directionFor(el) {
-  const col = el.closest('[class*="col-lg-6"], [class*="col-md-6"]')
-  const row = col?.parentElement
-  if (row?.classList.contains('row') && row.children.length === 2) {
-    return row.children[0] === col ? 'left' : 'right'
-  }
   return el.tagName === 'IMG' ? 'zoom' : 'up'
 }
 

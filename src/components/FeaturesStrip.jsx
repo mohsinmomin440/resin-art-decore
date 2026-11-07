@@ -4,7 +4,7 @@ import CertBadges from './CertBadges'
 const FEATURES = [
   {
     Icon: Handmade,
-    title: '100% Hand-Poured',
+    title: 'Hand-Poured',
     text: 'Every piece is poured and polished by hand in small studio batches — never mass-produced.',
   },
   {
@@ -15,7 +15,7 @@ const FEATURES = [
   {
     Icon: Diamond,
     title: 'Photo Preview Approval',
-    text: 'We share photos of your completed resin piece for your approval before careful shatterproof shipping.',
+    text: 'We share photos of your completed resin piece for your approval before it is carefully packed and shipped.',
   },
 ]
 

@@ -3,7 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Close, Heart } from './svg'
 import Logo from './Logo'
 import { useIsMobile } from '../hooks/useIsMobile'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useSaved } from '../hooks/useSaved'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -18,7 +18,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [saved] = useLocalStorage('rr_saved', [])
+  const { saved } = useSaved()
   const isMobile = useIsMobile()
   const location = useLocation()
 

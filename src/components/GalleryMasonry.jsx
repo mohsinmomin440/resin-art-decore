@@ -1,10 +1,10 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { productSrcSet } from '../utils/productImage'
+import { useModal } from '../hooks/useModal'
 import { WhatsApp, ArrowRight, Sparkle } from './svg'
 import { orderLink } from '../utils/whatsapp'
-import { useLocalStorage } from '../hooks/useLocalStorage'
-import { CONTACTS } from '../data/config'
+import { useContact, guardOrder } from '../hooks/useContact'
 import { shopProducts } from '../data/products'
 
 const PAGE_SIZE = 16
@@ -13,7 +13,7 @@ export default function GalleryMasonry({ photos }) {
   const [filter, setFilter] = useState('All')
   const [shown, setShown] = useState(PAGE_SIZE)
   const [lightbox, setLightbox] = useState(null)
-  const [contact] = useLocalStorage('rr_contact', CONTACTS.find((c) => c.default) || CONTACTS[0])
+  const { contact } = useContact()
 
   // Extract available unique categories
   const categories = useMemo(() => {
@@ -67,7 +67,7 @@ export default function GalleryMasonry({ photos }) {
         {page.map((p, i) => (
           <button
             type="button"
-            key={p.id + i}
+            key={p.id}
             className="rr-gallery-cell"
             onClick={() => setLightbox(i)}
             aria-label={`View larger: ${p.alt}`}
@@ -75,10 +75,13 @@ export default function GalleryMasonry({ photos }) {
             <div className="rr-gallery-cell__wrap">
               <img
                 src={p.id}
-                srcSet={p.slug ? productSrcSet(p.slug, 1) : undefined}
+                srcSet={p.slug ? productSrcSet(p.slug, p.index) : undefined}
+                width="800"
+                height="800"
                 sizes="(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 46vw"
                 alt={p.alt}
-                loading={i < 8 ? 'eager' : 'lazy'}
+                loading={i < 4 ? 'eager' : 'lazy'}
+                decoding="async"
                 className="rr-gallery-tile"
               />
               <div className="rr-gallery-cell__overlay">
@@ -124,20 +127,23 @@ function Lightbox({ photos, index, contact, onClose, onMove }) {
   const photo = photos[index]
   const matchedProduct = photo.slug ? shopProducts.find((p) => p.slug === photo.slug) : null
   const href = matchedProduct ? orderLink({ contact, product: matchedProduct }) : null
+  const dialogRef = useRef(null)
+  useModal(dialogRef, true, onClose)
 
   // Keyboard navigation & escape listener
   useEffect(() => {
     function onKey(e) {
-      if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowLeft') onMove((i) => (i - 1 + photos.length) % photos.length)
       if (e.key === 'ArrowRight') onMove((i) => (i + 1) % photos.length)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [photos.length, onClose, onMove])
+  }, [photos.length, onMove])
 
   return (
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       className="rr-lightbox"
       role="dialog"
       aria-modal="true"
@@ -166,7 +172,7 @@ function Lightbox({ photos, index, contact, onClose, onMove }) {
       </button>
 
       <figure className="rr-lightbox__figure" onClick={(e) => e.stopPropagation()}>
-        <img src={photo.id} alt={photo.alt} className="rr-lightbox__img" />
+        <img src={photo.full || photo.id} alt={photo.alt} className="rr-lightbox__img" />
         <figcaption className="rr-lightbox__cap">
           <div>
             <div className="rr-lightbox__cat">{photo.cat}</div>
@@ -177,6 +183,7 @@ function Lightbox({ photos, index, contact, onClose, onMove }) {
             {href && (
               <a
                 href={href}
+                onClick={(e) => guardOrder(e, (c) => orderLink({ contact: c, product: matchedProduct }))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rr-btn rr-btn--wa rr-btn--sm"

@@ -1,33 +1,24 @@
 import { Link } from 'react-router-dom'
-import { Heart, HeartFilled, ArrowRight, WhatsApp } from './svg'
+import { Heart, HeartFilled, WhatsApp } from './svg'
 import { productImage, productSrcSet, hasImages } from '../utils/productImage'
 import { priceLabel } from '../data/products'
-import { useLocalStorage } from '../hooks/useLocalStorage'
-import { CONTACTS } from '../data/config'
+import { orderLink } from '../utils/whatsapp'
+import { useSaved } from '../hooks/useSaved'
+import { useContact, guardOrder } from '../hooks/useContact'
+
+const SIZES = '(min-width: 1024px) 22vw, (min-width: 768px) 28vw, 46vw'
 
 export default function ProductCard({ product }) {
-  const [saved, setSaved] = useLocalStorage('rr_saved', [])
-
+  const { isSaved: isSavedFn, toggle } = useSaved()
+  const { contact } = useContact()
+  const isSaved = isSavedFn(product.slug)
   const hasSecond = product.images && product.images.length > 1
-  const isSaved = saved.includes(product.slug)
+  const hasPrice = product.price !== null && product.price !== undefined
 
   function toggleSave(e) {
     e.preventDefault()
     e.stopPropagation()
-    setSaved(isSaved ? saved.filter((s) => s !== product.slug) : [...saved, product.slug])
-  }
-
-  function openWhatsAppOrder(e) {
-    e.preventDefault()
-    e.stopPropagation()
-
-    const contact = CONTACTS.find(c => c.default) || CONTACTS[0]
-    const message = `Hi, I'm interested in ${product.name}. Please share details and pricing.`
-    const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/${contact.phone}?text=${encodedMessage}`
-
-    // Open synchronously before any await to avoid mobile blocking
-    window.location.href = whatsappUrl
+    toggle(product.slug)
   }
 
   return (
@@ -37,6 +28,7 @@ export default function ProductCard({ product }) {
           type="button"
           onClick={toggleSave}
           aria-label={isSaved ? `Remove ${product.name} from saved` : `Save ${product.name}`}
+          aria-pressed={isSaved}
           className="product-card__save"
         >
           {isSaved ? <HeartFilled size={15} /> : <Heart size={15} />}
@@ -46,20 +38,26 @@ export default function ProductCard({ product }) {
         {hasImages(product) ? (
           <Link to={`/product/${product.slug}`} className="product-card__link" aria-label={`View ${product.name}`}>
             <img
-              src={productImage(product.slug, 1, 500)}
+              src={productImage(product.slug, 1, 400)}
               srcSet={productSrcSet(product.slug, 1)}
-              sizes="(min-width: 1024px) 22vw, (min-width: 768px) 28vw, 46vw"
+              sizes={SIZES}
+              width="800"
+              height="800"
               alt={product.name}
               loading="lazy"
+              decoding="async"
               className="product-card__img"
             />
             {hasSecond && (
               <img
-                src={productImage(product.slug, 2, 500)}
+                src={productImage(product.slug, 2, 400)}
                 srcSet={productSrcSet(product.slug, 2)}
-                sizes="(min-width: 1024px) 22vw, (min-width: 768px) 28vw, 46vw"
+                sizes={SIZES}
+                width="800"
+                height="800"
                 alt=""
                 loading="lazy"
+                decoding="async"
                 className="product-card__img product-card__img--second"
               />
             )}
@@ -76,23 +74,18 @@ export default function ProductCard({ product }) {
         <Link to={`/product/${product.slug}`} className="product-card__name-link">
           <h3 className="product-card__name">{product.name}</h3>
         </Link>
-        <div className="product-card__price">{priceLabel(product)}</div>
-        <button
-          onClick={openWhatsAppOrder}
+        {hasPrice && <div className="product-card__price">{priceLabel(product)}</div>}
+        <a
+          href={orderLink({ contact, product })}
+          onClick={(e) => guardOrder(e, (c) => orderLink({ contact: c, product }))}
+          target="_blank"
+          rel="noopener noreferrer"
           className="product-card__btn rr-btn--wa"
-          aria-label={`Order ${product.name} on WhatsApp`}
+          aria-label={hasPrice ? `Order ${product.name} on WhatsApp` : `Ask the price of ${product.name} on WhatsApp`}
         >
-          <WhatsApp size={13} />
-          <span>Order on WhatsApp</span>
-        </button>
-        <Link
-          to={`/product/${product.slug}`}
-          className="product-card__btn rr-btn--ghost rr-btn--sm"
-          aria-label={`View ${product.name} details`}
-        >
-          <span>View Piece</span>
-          <ArrowRight size={13} />
-        </Link>
+          <WhatsApp size={16} />
+          <span>{hasPrice ? 'Order' : 'Ask price'}</span>
+        </a>
       </div>
     </article>
   )

@@ -22,12 +22,12 @@ export default function InstagramFeed() {
       <div className="container py-5">
         <div className="text-center mb-3">
           <span className="eyebrow">
-            <Instagram size={14} /> Studio Community
+            <Instagram size={14} /> Follow along
           </span>
           <h2 className="section-title mt-1">From Our Workshop</h2>
           <HeartDivider width={48} />
           <p className="rr-home-instagram__sub">
-            Follow our daily resin pours, customer unboxings &amp; bridal preservation stories on Instagram
+            Follow us on Instagram for new pieces and behind-the-scenes from the studio
           </p>
         </div>
 
@@ -38,12 +38,15 @@ export default function InstagramFeed() {
               to={`/product/${slug}`}
               className="rr-instagram-tile"
               aria-label={`View ${slug.replace(/-/g, ' ')}`}
+              title={slug.replace(/-/g, ' ')}
             >
               <img
                 src={productImage(slug, 1, 400)}
                 srcSet={productSrcSet(slug, 1)}
                 sizes="(min-width: 768px) 150px, 30vw"
                 alt=""
+                width="400"
+                height="400"
                 loading="lazy"
               />
               <span className="rr-instagram-tile__overlay">

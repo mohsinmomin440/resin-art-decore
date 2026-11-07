@@ -8,6 +8,7 @@ import Logo from './Logo'
 import CertBadges from './CertBadges'
 import { BUSINESS, CONTACTS, SOCIAL } from '../data/config'
 import { orderLink } from '../utils/whatsapp'
+import { useContact, guardOrder } from '../hooks/useContact'
 
 const QUICK_LINKS = [
   { to: '/', label: 'Home' },
@@ -23,14 +24,16 @@ const COLLECTION_LINKS = [
   { to: '/shop?category=Love%20%26%20Gifts', label: 'Bridal & Love Keepsakes' },
   { to: '/shop?category=Islamic%20Décor', label: 'Islamic Ayah Frames' },
   { to: '/shop?category=Keychains', label: 'Custom Name Keychains' },
-  { to: '/shop?category=Décor%20%26%20Accessories', label: 'Wall Clocks & Décor' },
+  { to: '/shop?category=Décor%20%26%20Accessories', label: 'Décor & Accessories' },
   { to: '/custom', label: 'Floral Preservation' },
 ]
 
 const year = new Date().getFullYear()
 
 export default function Footer() {
-  const waHref = orderLink({ contact: CONTACTS.find((c) => c.default) || CONTACTS[0] })
+  const { contact } = useContact()
+  const waHref = orderLink({ contact })
+  const guard = (e) => guardOrder(e, (c) => orderLink({ contact: c }))
 
   return (
     <footer className="rr-footer">
@@ -39,11 +42,12 @@ export default function Footer() {
         <div className="rr-footer__col rr-footer__brand">
           <Logo size="footer" />
           <p className="rr-footer__description">
-            Bespoke resin keepsakes, floral bridal preservation, Islamic wall art & personalized gifts, handcrafted to order with crystal-clear non-yellowing epoxy resin.
+            Bespoke resin keepsakes, floral bridal preservation, Islamic wall art & personalized gifts, handcrafted to order with crystal-clear UV-resistant epoxy resin.
           </p>
           <div className="rr-footer__socials">
             <a
               href={waHref}
+              onClick={guard}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Order on WhatsApp"
@@ -169,6 +173,7 @@ export default function Footer() {
 
           <a
             href={waHref}
+            onClick={guard}
             target="_blank"
             rel="noopener noreferrer"
             className="rr-footer__cta-btn"
@@ -195,6 +200,8 @@ export default function Footer() {
           <Link to="/faq">FAQ</Link>
           <span className="rr-footer__sep">·</span>
           <Link to="/contact">Contact</Link>
+          <span className="rr-footer__sep">·</span>
+          <Link to="/policies">Policies</Link>
         </nav>
       </div>
     </footer>

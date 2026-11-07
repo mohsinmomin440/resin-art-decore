@@ -14,25 +14,21 @@ const SORTS = [
 export default function ProductGrid() {
   const [searchParams, setSearchParams] = useSearchParams()
   const paramCat = searchParams.get('category')
-  const [category, setCategory] = useState(
-    paramCat && CATEGORIES.includes(paramCat) ? paramCat : 'All',
-  )
+  // The URL drives the filter, so header links, back/forward and shared links all stay in sync.
+  const category = paramCat && CATEGORIES.includes(paramCat) ? paramCat : 'All'
   const [sort, setSort] = useState('featured')
 
   function handleSelectCategory(cat) {
-    setCategory(cat)
-    if (cat === 'All') {
-      searchParams.delete('category')
-    } else {
-      searchParams.set('category', cat)
-    }
-    setSearchParams(searchParams, { replace: true })
+    const next = new URLSearchParams(searchParams)
+    if (cat === 'All') next.delete('category')
+    else next.set('category', cat)
+    setSearchParams(next, { replace: true })
   }
 
   const filtered = useMemo(() => {
     let list = category === 'All' ? shopProducts : shopProducts.filter((p) => p.category === category)
     if (sort === 'name') list = [...list].sort((a, b) => a.name.localeCompare(b.name))
-    else if (sort === 'newest') list = [...list].sort((a, b) => (b.badge === 'New' ? 1 : 0) - (a.badge === 'New' ? 1 : 0))
+    else if (sort === 'newest') list = [...list].sort((a, b) => (b.badge === 'New') - (a.badge === 'New'))
     return list
   }, [category, sort])
 
@@ -43,6 +39,7 @@ export default function ProductGrid() {
         <button
           type="button"
           className={`rr-chip${category === 'All' ? ' is-active' : ''}`}
+          aria-pressed={category === 'All'}
           onClick={() => handleSelectCategory('All')}
         >
           All Pieces <span className="rr-chip__n">{shopProducts.length}</span>
@@ -55,6 +52,7 @@ export default function ProductGrid() {
               key={c}
               type="button"
               className={`rr-chip${category === c ? ' is-active' : ''}`}
+              aria-pressed={category === c}
               onClick={() => handleSelectCategory(c)}
             >
               {c} <span className="rr-chip__n">{count}</span>

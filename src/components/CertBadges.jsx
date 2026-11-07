@@ -5,14 +5,14 @@ const BADGES = [
   {
     id: 'uv-resin',
     Icon: Diamond,
-    label: 'Non-Yellowing',
-    sub: 'UV-Resistant Resin',
+    label: 'UV-Resistant',
+    sub: 'Crystal-Clear Resin',
   },
   {
     id: 'gloss',
     Icon: Sparkle,
     label: 'Glass Finish',
-    sub: 'Diamond High Gloss',
+    sub: 'High-Gloss Finish',
   },
   {
     id: 'flowers',
@@ -24,7 +24,7 @@ const BADGES = [
     id: 'shipping',
     Icon: Package,
     label: 'Safe Shipping',
-    sub: 'Shatterproof All-India',
+    sub: 'Carefully Packed, All-India',
   },
   {
     id: 'preview',

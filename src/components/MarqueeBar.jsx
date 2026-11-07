@@ -1,41 +1,25 @@
-import { useEffect, useRef } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 /**
- * AnnouncementBar — continuous slow left-scroll marquee, pauses on hover/focus.
- * Under prefers-reduced-motion it becomes a static centered strip.
+ * MarqueeBar — slow left-scrolling announcement strip. The items are rendered
+ * twice (the second copy is aria-hidden) so translateX(-50%) loops seamlessly
+ * without touching React-managed DOM. Pauses on hover/focus; under
+ * prefers-reduced-motion it becomes a static strip showing each item once.
  */
 export default function MarqueeBar({ items }) {
   const reduce = useReducedMotion()
-  const trackRef = useRef(null)
-
-  // Duplicate the track so translateX(-50%) loops seamlessly.
-  useEffect(() => {
-    const track = trackRef.current
-    if (!reduce && track) {
-      // Clone the visible content once, so the loop is seamless.
-      if (track.dataset.cloned !== '1') {
-        track.innerHTML += track.innerHTML
-        track.dataset.cloned = '1'
-      }
-    }
-  }, [reduce])
+  const copies = reduce ? [false] : [false, true]
 
   return (
-    <div className="rr-announce" aria-live="polite">
-      <div
-        ref={trackRef}
-        className={`rr-announce__track${reduce ? ' rr-announce__track--static' : ''}`}
-        onMouseEnter={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'paused' }}
-        onMouseLeave={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'running' }}
-        onFocusCapture={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'paused' }}
-        onBlurCapture={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'running' }}
-      >
-        {items.map((item, i) => (
-          <span key={i} className="rr-announce__item">
-            {item}
-          </span>
-        ))}
+    <div className="rr-announce" role="region" aria-label="Announcements">
+      <div className={`rr-announce__track${reduce ? ' rr-announce__track--static' : ''}`}>
+        {copies.map((hidden) =>
+          items.map((item, i) => (
+            <span key={`${hidden ? 'b' : 'a'}${i}`} className="rr-announce__item" aria-hidden={hidden || undefined}>
+              {item}
+            </span>
+          )),
+        )}
       </div>
     </div>
   )

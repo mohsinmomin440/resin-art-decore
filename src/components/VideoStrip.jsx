@@ -10,10 +10,9 @@ export default function VideoStrip() {
       <div className="rr-reels-invite__icon">
         <Instagram size={28} />
       </div>
-      <h3 className="rr-reels-invite__title">Watch Live Pours &amp; Reels</h3>
+      <h3 className="rr-reels-invite__title">Watch Pours &amp; Reels</h3>
       <p className="rr-reels-invite__desc">
-        We record the liquid epoxy swirl, gold leaf layering, and demolding process for our custom pieces.
-        Follow our studio journey on Instagram to see every creation come to life.
+        Follow our studio on Instagram to see new pieces and how they are made.
       </p>
       <a
         href={igUrl}

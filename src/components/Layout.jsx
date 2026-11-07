@@ -6,6 +6,8 @@ import { Suspense } from 'react'
 import { useLocation } from 'react-router-dom'
 import ScrollReveal from './ScrollReveal'
 import ScrollProgress from './ScrollProgress'
+import ScrollToTop from './ScrollToTop'
+import NumberChooser from './NumberChooser'
 import BackToTop from './BackToTop'
 import WhatsAppFab from './WhatsAppFab'
 import FestivalBanner from './FestivalBanner'
@@ -20,7 +22,7 @@ const NO_FOOTER_ROUTES = ['/custom', '/saved']
 const ANNOUNCEMENTS = [
   'Handmade resin keepsakes • Poured with love in Gujarat',
   'Custom names, initials & bridal flower preservation',
-  'Crystal-clear UV non-yellowing resin • Shatterproof packaging',
+  'Crystal-clear UV-resistant epoxy resin • Carefully packed for delivery',
   'Islamic calligraphy, anniversary frames & personalized gifts',
 ]
 
@@ -33,6 +35,7 @@ export default function Layout({ children }) {
   return (
     <div className="rr-layout">
       <a href="#main" className="rr-skip-link">Skip to main content</a>
+      <ScrollToTop />
       <ScrollProgress />
       <FestivalBanner />
       <MarqueeBar items={ANNOUNCEMENTS} />
@@ -48,6 +51,7 @@ export default function Layout({ children }) {
       {!hideFooter && <Footer />}
       <BackToTop />
       {!isProduct && <WhatsAppFab />}
+      <NumberChooser />
     </div>
   )
 }

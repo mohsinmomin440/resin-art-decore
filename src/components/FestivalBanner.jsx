@@ -13,7 +13,9 @@ import {
 } from './svg'
 import { FESTIVALS, getActiveFestival, isPreview } from '../data/festivals.js'
 
-const DISMISS_KEY = 'rr_festival_dismissed_v1'
+const DISMISS_KEY = 'rr_festival_dismissed_v2'
+// Dismissal is remembered per festival *and* year, so next year's banner shows again.
+const dismissToken = (f) => `${f.id}-${new Date().getFullYear()}`
 
 const ICONS = {
   CrescentStar,
@@ -34,7 +36,7 @@ export default function FestivalBanner() {
     if (!preview) {
       try {
         const raw = localStorage.getItem(DISMISS_KEY)
-        if (raw && JSON.parse(raw).id === f.id) return null
+        if (raw && JSON.parse(raw).token === dismissToken(f)) return null
       } catch {
         // ignore malformed storage
       }
@@ -45,7 +47,7 @@ export default function FestivalBanner() {
   function dismiss() {
     if (!festival) return
     try {
-      localStorage.setItem(DISMISS_KEY, JSON.stringify({ id: festival.id, t: Date.now() }))
+      localStorage.setItem(DISMISS_KEY, JSON.stringify({ token: dismissToken(festival), t: Date.now() }))
     } catch {
       // ignore storage errors
     }

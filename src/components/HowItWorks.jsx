@@ -7,7 +7,7 @@ const STEPS = [
     step: '01',
     Icon: Search,
     title: 'Choose your style',
-    text: 'Browse our collection of calligraphy frames, clocks, letters or keychains — or send your own custom concept.',
+    text: 'Browse our collection of calligraphy frames, letters, keychains or phone cases — or send your own custom concept.',
   },
   {
     Icon: Custom,
@@ -57,7 +57,7 @@ export default function HowItWorks() {
           </li>
           <li>
             <Package size={15} aria-hidden />
-            <span>Multi-layer bubble wrap & shatterproof delivery across India</span>
+            <span>Carefully packed and delivered across India</span>
           </li>
         </ul>
 
