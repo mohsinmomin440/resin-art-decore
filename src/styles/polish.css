@@ -314,3 +314,15 @@ html {
   .product-card__body { padding: 14px; }
   .product-card__name { font-size: 18px; }
 }
+
+/* ─── Order links are anchors now (were buttons) ─── */
+.rr-wa-fab { text-decoration: none; }
+
+/* Marquee pauses on hover/focus (pure CSS — the track is plain React markup) */
+.rr-announce:hover .rr-announce__track,
+.rr-announce:focus-within .rr-announce__track { animation-play-state: paused; }
+
+/* ─── Policies page ─── */
+.rr-policy { max-width: 720px; margin: 0 auto; }
+.rr-policy h2 { font-size: 1.35rem; margin: 2rem 0 0.5rem; }
+.rr-policy p { color: var(--rr-muted); line-height: 1.7; }

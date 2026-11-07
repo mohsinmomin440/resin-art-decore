@@ -1,0 +1,312 @@
+/**
+ * refine.css — final design pass (imported LAST in main.jsx, after polish.css)
+ *
+ * What this layer does
+ *  1. Hero shows real product photography instead of an empty maroon panel.
+ *  2. Product cards: one clear gold action ("order = gold"), no stacked twin buttons.
+ *  3. Mobile chrome: quieter announcement area, scrollable assurance chips,
+ *     buttons that can never push past the screen edge.
+ *  4. Footer: one shared content width, tidy mobile columns.
+ *
+ * Tokens only (tokens.css). No new colours.
+ */
+
+/* ───────── 0. Safety nets (mobile) ───────── */
+@media (max-width: 479.98px) {
+  /* Long labels wrap instead of overflowing; the nowrap rule stays for wider screens. */
+  .rr-btn { white-space: normal; text-align: center; line-height: 1.25; max-width: 100%; }
+}
+
+.rr-btn { max-width: 100%; }
+
+/* ───────── 1. Announcement area ───────── */
+@media (max-width: 767.98px) {
+  /* The scrolling strip repeats claims already made on the page; the festival
+     banner (when active) is the only thing worth the vertical space on a phone. */
+  .rr-announce { display: none; }
+
+  .rr-festival-banner {
+    padding: 7px 12px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    gap: 8px;
+  }
+  .rr-festival-banner__msg { text-align: left; }
+  .rr-festival-banner__cta { margin-left: 6px; white-space: nowrap; }
+  .rr-festival-banner__close {
+    min-width: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ───────── 2. Hero: real photography ───────── */
+.rr-hero { padding: 24px 0 20px; }
+
+@media (min-width: 768px) { .rr-hero { padding: 48px 0 40px; } }
+@media (min-width: 1024px) { .rr-hero { padding: 56px 0 48px; } }
+
+@media (min-width: 1024px) {
+  .rr-hero__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; }
+}
+
+.rr-hero__panel {
+  position: relative;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  aspect-ratio: 5 / 4;
+  background: var(--rr-blush-100);
+  border: 1px solid rgba(224, 176, 74, 0.45);
+  border-radius: 28px;
+  overflow: visible;           /* the side photo may overlap the frame */
+  box-shadow: var(--rr-shadow-lg);
+}
+
+@media (min-width: 768px) { .rr-hero__panel { aspect-ratio: 16 / 10; } }
+@media (min-width: 1024px) { .rr-hero__panel { aspect-ratio: 1 / 1; max-width: 500px; width: 100%; justify-self: end; border-radius: 32px; } }
+
+.rr-hero__photo { position: absolute; display: block; overflow: hidden; }
+.rr-hero__photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 700ms var(--rr-ease); }
+
+.rr-hero__photo--main { inset: 0; border-radius: inherit; }
+
+.rr-hero__photo--side {
+  right: -10px;
+  bottom: -18px;
+  width: 34%;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  border: 4px solid var(--rr-marble);
+  box-shadow: var(--rr-shadow-md);
+  z-index: 3;
+}
+
+@media (min-width: 1024px) { .rr-hero__photo--side { right: -28px; bottom: 36px; width: 38%; border-width: 5px; border-radius: 24px; } }
+
+@media (hover: hover) {
+  .rr-hero__panel:hover .rr-hero__photo--main img { transform: scale(1.04); }
+}
+
+/* Caption chip, top-left, links to the product */
+.rr-hero__caption {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 28px);
+  min-height: 40px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 248, 246, 0.94);
+  border: 1px solid rgba(224, 176, 74, 0.5);
+  box-shadow: var(--rr-shadow-sm);
+  color: var(--rr-maroon-700);
+  text-decoration: none;
+  font-size: 13.5px;
+}
+
+.rr-hero__caption-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rr-crimson-600);
+}
+
+.rr-hero__caption-name {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Keep the panel off the screen edge where the side photo overlaps it */
+@media (max-width: 1023.98px) { .rr-hero__panel { max-width: none; margin: 0 10px 18px 0; } }
+
+/* Text column: tighter on phones so the CTA sits above the fold */
+@media (max-width: 767.98px) {
+  .rr-hero__lede { font-size: 16px; margin-bottom: 1rem; }
+  .rr-hero__ticks { margin-bottom: 1.1rem; gap: 8px; }
+  .rr-hero__ticks li { font-size: 14.5px; }
+  .rr-hero__ctas { gap: 10px; }
+  .rr-hero__ctas .rr-btn { flex: 1 1 100%; }
+}
+
+/* ───────── 3. Assurance chips: one tidy row on phones ───────── */
+@media (max-width: 767.98px) {
+  .rr-cert-pills {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 10px;
+    margin-inline: calc(var(--rr-gutter) * -1);
+    padding: 4px var(--rr-gutter) 8px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rr-cert-pills::-webkit-scrollbar { display: none; }
+  .rr-cert-pill { flex: 0 0 auto; scroll-snap-align: start; }
+}
+
+/* ───────── 4. Category tiles ───────── */
+.rr-category-tile__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--rr-gold-500);
+}
+
+/* ───────── 5. Product cards ───────── */
+.product-card .product-card__body {
+  padding: 14px 14px 16px;
+  gap: 0;
+}
+
+@media (min-width: 768px) { .product-card .product-card__body { padding: 18px 18px 20px; } }
+
+.product-card .product-card__cat { margin-bottom: 4px; }
+
+.product-card .product-card__name {
+  font-size: 19px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4em;           /* keeps buttons aligned across a row */
+}
+
+@media (min-width: 768px) { .product-card .product-card__name { font-size: 21px; } }
+
+.product-card .product-card__price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  margin: -4px 0 12px;
+}
+
+/* The one action: gold = order */
+.product-card .product-card__btn {
+  margin-top: auto;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--rr-order-bg);
+  color: var(--rr-order-ink);
+  border: 1px solid rgba(255, 244, 214, 0.7);
+  box-shadow: 0 4px 14px var(--rr-order-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.product-card .product-card__btn svg { color: var(--rr-maroon-800); flex-shrink: 0; }
+
+@media (hover: hover) {
+  .product-card .product-card__btn:hover {
+    background: var(--rr-order-bg-hover);
+    color: var(--rr-order-ink);
+    border-color: rgba(255, 244, 214, 0.9);
+    box-shadow: 0 8px 22px var(--rr-order-glow);
+  }
+}
+
+/* Save button: 44px tap target on touch */
+@media (pointer: coarse) { .product-card__save { width: 44px; height: 44px; } }
+
+/* ───────── 6. Product page (mobile) ───────── */
+.rr-product-stage__gallery,
+.rr-product-stage__details { min-width: 0; }
+
+.rr-product-stage__sub-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.rr-product-stage__sub-actions > * { flex: 1 1 150px; min-width: 0; }
+
+.rr-product-stage__title { overflow-wrap: anywhere; }
+
+/* ───────── 7. Instagram CTA ───────── */
+.rr-home-instagram .rr-btn { max-width: 100%; padding-inline: 20px; }
+
+/* ───────── 8. Footer: one shared content width ───────── */
+.rr-footer__inner,
+.rr-footer__cert-band,
+.rr-footer__bottom {
+  max-width: var(--rr-container);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 1024px) {
+  .rr-footer__inner,
+  .rr-footer__cert-band,
+  .rr-footer__bottom { padding-inline: 32px; }
+}
+
+@media (min-width: 768px) {
+  /* previous rule reserved 76px / 210px to dodge the floating button */
+  .rr-footer__bottom { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (min-width: 1024px) {
+  .rr-footer__bottom { padding-left: 32px; padding-right: 32px; }
+}
+
+.rr-footer__cert-band { text-align: left; }
+@media (max-width: 767.98px) { .rr-footer__cert-band { text-align: center; } }
+
+/* Phones: the two link lists share a row instead of stacking */
+@media (max-width: 639.98px) {
+  .rr-footer__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; }
+  .rr-footer__brand,
+  .rr-footer__atelier { grid-column: 1 / -1; }
+  /* room so the floating WhatsApp button never covers the legal links */
+  .rr-footer { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ───────── 9. Reduced motion ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .rr-hero__photo img { transition: none; }
+  .rr-hero__panel:hover .rr-hero__photo--main img { transform: none; }
+}
+
+/* ───────── 10. Custom builder tiles: equal photo size ───────── */
+/* The tile is a <button>, so it shrank to its label; make it fill its grid cell. */
+.rr-builder__tile { display: flex; flex-direction: column; width: 100%; min-width: 0; }
+.rr-builder__tile-name { margin-top: auto; }
+.rr-builder__grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+@media (min-width: 768px) { .rr-builder__grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } }
+
+/* Product page secondary actions: keep labels on one line where they fit */
+.rr-product-stage__sub-actions .rr-btn { padding-inline: 14px; font-size: 14.5px; }
+
+/* ───────── 11. Gallery captions stay readable on bright photos ───────── */
+.rr-gallery-cell__overlay {
+  background: linear-gradient(180deg, rgba(63, 7, 20, 0) 20%, rgba(63, 7, 20, 0.6) 60%, rgba(63, 7, 20, 0.92) 100%);
+}
+.rr-gallery-cell__cat { color: var(--rr-gold-500); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+
+/* ───────── 12. FAQ closing card (had no styles) ───────── */
+.rr-faq-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 28px;
+  padding: 22px 20px;
+  background: var(--rr-white);
+  border: 1px solid rgba(224, 176, 74, 0.4);
+  border-radius: 22px;
+  box-shadow: var(--rr-shadow-sm);
+}
+.rr-faq-cta h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.5rem; color: var(--rr-maroon-700); margin: 0 0 4px; }
+.rr-faq-cta p { margin: 0; color: var(--rr-muted); }
+@media (min-width: 640px) {
+  .rr-faq-cta { flex-direction: row; align-items: center; justify-content: space-between; padding: 24px 28px; }
+}

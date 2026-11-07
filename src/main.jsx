@@ -8,6 +8,7 @@ import './styles/reset.css'
 import './styles/components.css'
 import './styles/responsive.css'
 import './styles/polish.css'
+import './styles/refine.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

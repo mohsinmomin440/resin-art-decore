@@ -143,7 +143,7 @@ img, video, svg, canvas, iframe {
 
 @media (max-width: 359.98px) {
   .product-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 14px;
   }
 }
@@ -214,7 +214,7 @@ img, video, svg, canvas, iframe {
 
 .rr-hero__grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
   align-items: center;
 }
@@ -249,7 +249,7 @@ img, video, svg, canvas, iframe {
 /* ───────────────────────── 8. Product Page Stage ────────────────────────── */
 .rr-product-stage {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
 }
 
@@ -292,7 +292,7 @@ img, video, svg, canvas, iframe {
 /* ───────────────────────── 10. Footer ───────────────────────────────────── */
 .rr-footer__inner {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
 }
 
